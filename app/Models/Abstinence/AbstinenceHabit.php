@@ -1,0 +1,52 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models\Abstinence;
+
+use App\Models\Habit;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+
+/**
+ * @property string $id
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read Habit|null $habit
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, AbstinenceHabitEntry> $relapses
+ * @property-read int|null $relapses_count
+ *
+ * @method static \Database\Factories\Abstinence\AbstinenceHabitFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
+ */
+final class AbstinenceHabit extends Model
+{
+    /** @use HasFactory<\Database\Factories\Abstinence\AbstinenceHabitFactory> */
+    use HasFactory, HasUuids;
+
+    /**
+     * @return MorphOne<Habit>
+     */
+    public function habit(): MorphOne
+    {
+        return $this->morphOne(Habit::class, 'habitable');
+    }
+
+    /**
+     * @return HasMany<AbstinenceHabitEntry, $this>
+     */
+    public function entries(): HasMany
+    {
+        return $this->hasMany(AbstinenceHabitEntry::class);
+    }
+}
