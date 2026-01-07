@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('id');
-            $table->uuid('id')->unique();
+        Schema::table('count_habits', function (Blueprint $table) {
+            $table->renameColumn('unit_type', 'measurement_unit_type');
         });
     }
 
@@ -24,9 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('id');
-            $table->id();
+        Schema::table('count_habits', function (Blueprint $table) {
+            $table->renameColumn('measurement_unit_type', 'unit_type');
         });
     }
 };
