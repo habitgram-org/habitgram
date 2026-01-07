@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Actions\Fortify\CreateNewUser;
 use App\Enums\HabitType;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Abstinence\AbstinenceHabitEntry;

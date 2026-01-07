@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Count;
 
+use App\Enums\MeasurementUnitTypeEnum;
 use App\Models\Habit;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
  * @property string $id
- * @property int $unit_type
+ * @property MeasurementUnitTypeEnum $measurement_unit_type
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, CountHabitEntry> $entries
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereUnitType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereMeasurementUnitType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereUpdatedAt($value)
  *
  * @mixin \Eloquent
@@ -35,6 +36,10 @@ final class CountHabit extends Model
 {
     /** @use HasFactory<\Database\Factories\Count\CountHabitFactory> */
     use HasFactory, HasUuids;
+
+    protected $casts = [
+        'measurement_unit_type' => MeasurementUnitTypeEnum::class,
+    ];
 
     /**
      * @return MorphOne<Habit>

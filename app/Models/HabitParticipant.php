@@ -16,7 +16,10 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property bool $is_leader
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read Habit $habit
+ * @property-read User $user
  *
+ * @method static \Database\Factories\HabitParticipantFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|HabitParticipant newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|HabitParticipant newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|HabitParticipant query()
@@ -47,6 +50,6 @@ final class HabitParticipant extends Pivot
      */
     public function user(): BelongsTo
     {
-       return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 }

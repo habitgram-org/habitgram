@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property string $id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, AbstinenceHabitEntry> $entries
+ * @property-read int|null $entries_count
  * @property-read Habit|null $habit
- * @property-read \Illuminate\Database\Eloquent\Collection<int, AbstinenceHabitEntry> $relapses
- * @property-read int|null $relapses_count
  *
  * @method static \Database\Factories\Abstinence\AbstinenceHabitFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit newModelQuery()

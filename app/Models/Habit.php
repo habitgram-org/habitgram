@@ -10,7 +10,6 @@ use App\Models\Daily\DailyHabit;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -25,10 +24,13 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string|null $ended_at
  * @property string $habitable_type
  * @property string $habitable_id
- * @property string $user_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read CountHabit|AbstinenceHabit|DailyHabit $habitable
+ * @property-read User|null $leader
+ * @property-read HabitParticipant|null $pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $participants
+ * @property-read int|null $participants_count
  *
  * @method static \Database\Factories\HabitFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit newModelQuery()
@@ -45,7 +47,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereUserId($value)
  *
  * @mixin \Eloquent
  */
@@ -70,7 +71,7 @@ final class Habit extends Model
         return $this->hasOneThrough(
             related: User::class,
             through: HabitParticipant::class,
-            firstkey: 'habit_id',
+            firstKey: 'habit_id',
             secondLocalKey: 'user_id'
         )->where('habit_participant.is_leader', true);
     }

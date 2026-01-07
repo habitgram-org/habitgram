@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $id
+ * @property string $id
  * @property string|null $failed_at
  * @property string|null $succeed_at
  * @property string $daily_habit_id
