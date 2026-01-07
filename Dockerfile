@@ -61,7 +61,7 @@ WORKDIR /var/www/html
 
 COPY --chown=www-data:www-data . .
 
-RUN echo 'alias a="php artisan"' >> ~/.bashrc
+RUN echo 'alias ar="php artisan"' >> ~/.bashrc
 
 COPY .docker/cron/cronjob /etc/cron.d/cronjob
 
