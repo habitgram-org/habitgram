@@ -20,7 +20,7 @@ final class CountHabitFactory extends Factory
     public function definition(): array
     {
         return [
-            'unit_type' => fake()->randomElement(MeasurementUnitTypeEnum::class),
+            'measurement_unit_type' => fake()->randomElement(MeasurementUnitTypeEnum::class),
         ];
     }
 }

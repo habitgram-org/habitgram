@@ -12,13 +12,13 @@ use App\Models\Count\CountHabitEntry;
 use App\Models\Daily\DailyHabit;
 use App\Models\Daily\DailyHabitEntry;
 use App\Models\Habit;
+use App\Models\HabitEntryNote;
 use App\Models\HabitParticipant;
 use App\Models\User;
 use Illuminate\Console\Command;
 use LogicException;
 
 use function Laravel\Prompts\select;
-use function Laravel\Prompts\text;
 
 final class GenerateFakeHabits extends Command
 {
@@ -28,7 +28,6 @@ final class GenerateFakeHabits extends Command
 
     public function handle(): int
     {
-        $entriesCount = (int) text('How many entries for habit?', required: true);
         $type = select('Which type?', HabitType::values());
 
         /** @var class-string<AbstinenceHabit|CountHabit|DailyHabit> $habitable */
@@ -63,7 +62,7 @@ final class GenerateFakeHabits extends Command
             ])
             ->create();
         $entryable::factory()
-            ->count($entriesCount)
+            ->count(random_int(1, 20))
             ->state([
                 'habit_participant_id' => $participant->id,
                 match ($habitable) {
@@ -72,9 +71,14 @@ final class GenerateFakeHabits extends Command
                     DailyHabit::class => 'daily_habit_id',
                 } => $habit->habitable_id,
             ])
+            ->has(
+                factory: HabitEntryNote::factory()
+                    ->state(['habit_participant_id' => $participant->id]),
+                relationship: 'notes'
+            )
             ->create();
 
-        info('Fake habits were successfully generated.');
+        $this->info('Fake habits were successfully generated.');
 
         return Command::SUCCESS;
     }

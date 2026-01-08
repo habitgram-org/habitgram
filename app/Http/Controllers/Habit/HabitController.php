@@ -2,20 +2,31 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Habit;
 
 use App\Http\Requests\StoreHabitRequest;
 use App\Http\Requests\UpdateHabitRequest;
+use App\Http\Resources\HabitResource;
+use App\Models\Count\CountHabit;
 use App\Models\Habit;
+use Illuminate\Contracts\Auth\Access\Gate;
 
-final class HabitController extends Controller
+final readonly class HabitController
 {
+    public function __construct(private Gate $gate) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->gate->authorize('index', Habit::class);
+
+        $user = auth()->user();
+
+        return inertia('habits/index', [
+            'habits' => HabitResource::collection($user->habits),
+        ]);
     }
 
     /**
@@ -39,7 +50,16 @@ final class HabitController extends Controller
      */
     public function show(Habit $habit)
     {
-        //
+        $this->gate->authorize('view', $habit);
+
+        $habit->load('habitable.entries.notes')
+            ->loadMorphSum('habitable', [
+                CountHabit::class => ['entries'],
+            ], 'value');
+
+        return inertia('habits/show', [
+            'habit' => new HabitResource($habit),
+        ]);
     }
 
     /**

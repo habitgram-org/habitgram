@@ -13,6 +13,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
+ * @property string $id
  * @property string $name
  * @property string $email
  * @property \Carbon\CarbonImmutable|null $email_verified_at
@@ -23,7 +24,6 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
  * @property \Carbon\CarbonImmutable|null $two_factor_confirmed_at
- * @property string $id
  * @property-read HabitParticipant|null $pivot
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Habit> $habits
  * @property-read int|null $habits_count
@@ -81,7 +81,8 @@ final class User extends Authenticatable implements MustVerifyEmail
      */
     public function habits(): BelongsToMany
     {
-        return $this->belongsToMany(Habit::class)->using(HabitParticipant::class);
+        return $this->belongsToMany(Habit::class, 'habit_participant')
+            ->using(HabitParticipant::class);
     }
 
     /**

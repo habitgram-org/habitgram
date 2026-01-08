@@ -11,7 +11,8 @@ Route::get('/', fn () => Inertia::render('welcome', [
 ]))->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function (): void {
-    Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
+    Route::get('dashboard', fn () => inertia('dashboard'))->name('dashboard');
 });
 
 require __DIR__.'/settings.php';
+require __DIR__.'/habits.php';

@@ -20,7 +20,7 @@ enum MeasurementUnitTypeEnum: int
     case PushUps = 5;
     case PullUps = 6;
     case Squats = 7;
-    case Situps = 8;
+    case SitUps = 8;
     case Burpees = 9;
     case Planks = 10; // seconds
 

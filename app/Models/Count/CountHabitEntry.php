@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Models\Count;
 
+use App\Models\HabitEntryNote;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property string $id
@@ -17,6 +19,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property-read CountHabit $countHabit
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitEntryNote> $notes
+ * @property-read int|null $notes_count
  *
  * @method static \Database\Factories\Count\CountHabitEntryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry newModelQuery()
@@ -42,5 +46,13 @@ final class CountHabitEntry extends Model
     public function countHabit(): BelongsTo
     {
         return $this->belongsTo(CountHabit::class);
+    }
+
+    /**
+     * @return MorphMany<HabitEntryNote, $this>
+     */
+    public function notes(): MorphMany
+    {
+        return $this->morphMany(HabitEntryNote::class, 'notable');
     }
 }

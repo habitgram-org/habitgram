@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\HabitType;
+use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
+use App\Http\Resources\CountHabit\CountHabitResource;
+use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
 use App\Models\Daily\DailyHabit;
@@ -13,15 +17,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use LogicException;
 
 /**
  * @property string $id
  * @property string $name
  * @property string|null $description
- * @property string|null $starts_at
- * @property string|null $ends_at
- * @property string|null $started_at
- * @property string|null $ended_at
+ * @property \Carbon\CarbonImmutable|null $starts_at
+ * @property \Carbon\CarbonImmutable|null $ends_at
+ * @property \Carbon\CarbonImmutable|null $started_at
+ * @property \Carbon\CarbonImmutable|null $ended_at
  * @property string $habitable_type
  * @property string $habitable_id
  * @property \Carbon\CarbonImmutable|null $created_at
@@ -55,8 +60,15 @@ final class Habit extends Model
     /** @use HasFactory<\Database\Factories\HabitFactory> */
     use HasFactory, HasUuids;
 
+    protected $casts = [
+        'started_at' => 'immutable_datetime',
+        'ended_at' => 'immutable_datetime',
+        'starts_at' => 'immutable_datetime',
+        'ends_at' => 'immutable_datetime',
+    ];
+
     /**
-     * @return MorphTo<CountHabit|AbstinenceHabit|DailyHabit>
+     * @return MorphTo<CountHabit|AbstinenceHabit|DailyHabit, $this>
      */
     public function habitable(): MorphTo
     {
@@ -81,6 +93,26 @@ final class Habit extends Model
      */
     public function participants(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(HabitParticipant::class);
+        return $this->belongsToMany(User::class, 'habit_participant')->using(HabitParticipant::class);
+    }
+
+    public function getHabitableResource(): AbstinenceHabitResource|CountHabitResource|DailyHabitResource
+    {
+        return match ($this->habitable::class) {
+            AbstinenceHabit::class => new AbstinenceHabitResource($this->habitable),
+            CountHabit::class => new CountHabitResource($this->habitable),
+            DailyHabit::class => new DailyHabitResource($this->habitable),
+            default => throw new LogicException('Unhandled habitable type'),
+        };
+    }
+
+    public function getType(): HabitType
+    {
+        return match ($this->habitable::class) {
+            AbstinenceHabit::class => HabitType::Abstinence,
+            CountHabit::class => HabitType::Count,
+            DailyHabit::class => HabitType::Daily,
+            default => throw new LogicException('Unhandled habitable type'),
+        };
     }
 }

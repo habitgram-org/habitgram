@@ -12,9 +12,9 @@ final class HabitPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,7 @@ final class HabitPolicy
      */
     public function view(User $user, Habit $habit): bool
     {
-        return false;
+        return $habit->participants->contains('id', $user->id);
     }
 
     /**
