@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use LogicException;
 
 /**
  * @property string $id
@@ -68,7 +67,7 @@ final class Habit extends Model
     ];
 
     /**
-     * @return MorphTo<CountHabit|AbstinenceHabit|DailyHabit, $this>
+     * @return MorphTo<Model, $this>
      */
     public function habitable(): MorphTo
     {
@@ -101,8 +100,7 @@ final class Habit extends Model
         return match ($this->habitable::class) {
             AbstinenceHabit::class => new AbstinenceHabitResource($this->habitable),
             CountHabit::class => new CountHabitResource($this->habitable),
-            DailyHabit::class => new DailyHabitResource($this->habitable),
-            default => throw new LogicException('Unhandled habitable type'),
+            default => new DailyHabitResource($this->habitable),
         };
     }
 
@@ -111,8 +109,7 @@ final class Habit extends Model
         return match ($this->habitable::class) {
             AbstinenceHabit::class => HabitType::Abstinence,
             CountHabit::class => HabitType::Count,
-            DailyHabit::class => HabitType::Daily,
-            default => throw new LogicException('Unhandled habitable type'),
+            default => HabitType::Daily,
         };
     }
 }

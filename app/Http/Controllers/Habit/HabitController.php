@@ -10,6 +10,7 @@ use App\Http\Resources\HabitResource;
 use App\Models\Count\CountHabit;
 use App\Models\Habit;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Inertia\Response;
 
 final readonly class HabitController
 {
@@ -18,7 +19,7 @@ final readonly class HabitController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
         $this->gate->authorize('index', Habit::class);
 
@@ -32,7 +33,7 @@ final readonly class HabitController
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): void
     {
         //
     }
@@ -40,7 +41,7 @@ final readonly class HabitController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHabitRequest $request)
+    public function store(StoreHabitRequest $request): void
     {
         //
     }
@@ -48,7 +49,7 @@ final readonly class HabitController
     /**
      * Display the specified resource.
      */
-    public function show(Habit $habit)
+    public function show(Habit $habit): Response
     {
         $this->gate->authorize('view', $habit);
 
@@ -65,7 +66,7 @@ final readonly class HabitController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Habit $habit)
+    public function edit(Habit $habit): void
     {
         //
     }
@@ -73,7 +74,7 @@ final readonly class HabitController
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHabitRequest $request, Habit $habit)
+    public function update(UpdateHabitRequest $request, Habit $habit): void
     {
         //
     }
@@ -81,7 +82,7 @@ final readonly class HabitController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Habit $habit)
+    public function destroy(Habit $habit): void
     {
         //
     }

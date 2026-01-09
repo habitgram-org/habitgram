@@ -69,6 +69,9 @@ final class GenerateFakeHabits extends Command
                     AbstinenceHabit::class => 'abstinence_habit_id',
                     CountHabit::class => 'count_habit_id',
                     DailyHabit::class => 'daily_habit_id',
+                    default => throw new LogicException(
+                        'Invalid habit type. Supported habit types: '.implode(',', HabitType::values())
+                    )
                 } => $habit->habitable_id,
             ])
             ->has(

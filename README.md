@@ -6,4 +6,4 @@
 - [ ] Read the docs on relationships
 - [ ] Refactor HabitEntryController::store()
 - [ ] Fix PHPStan errors
-
+- [ ] Add "By" to CountHabit's table

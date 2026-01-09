@@ -15,7 +15,7 @@ final class HabitEntryController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): void
     {
         //
     }
@@ -23,7 +23,7 @@ final class HabitEntryController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Habit $habit, Request $request)
+    public function store(Habit $habit, Request $request): void
     {
         // TODO: Policy goes here
 
@@ -48,7 +48,7 @@ final class HabitEntryController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): void
     {
         //
     }
@@ -56,7 +56,7 @@ final class HabitEntryController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): void
     {
         //
     }
@@ -64,7 +64,7 @@ final class HabitEntryController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): void
     {
         //
     }

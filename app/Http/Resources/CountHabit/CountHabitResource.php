@@ -22,7 +22,7 @@ final class CountHabitResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'total' => $this->resource->entries_sum_value,
+            'total' => $this->resource->getAttribute('entries_sum_value'),
             'measurement_type_unit' => $this->resource->measurement_unit_type->name,
             'entries' => CountHabitEntryResource::collection($this->whenLoaded('entries')),
             'created_at' => $this->whenNotNull($this->resource->created_at?->toDateString()),

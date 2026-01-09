@@ -43,7 +43,7 @@ final class HabitEntryNote extends Model
     use HasFactory, HasUuids;
 
     /**
-     * @return MorphTo<AbstinenceHabitEntry|CountHabitEntry|DailyHabitEntry, $this>
+     * @return MorphTo<Model, $this>
      */
     public function notable(): MorphTo
     {

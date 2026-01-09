@@ -35,7 +35,7 @@ final class AbstinenceHabit extends Model
     use HasFactory, HasUuids;
 
     /**
-     * @return MorphOne<Habit>
+     * @return MorphOne<Habit, $this>
      */
     public function habit(): MorphOne
     {

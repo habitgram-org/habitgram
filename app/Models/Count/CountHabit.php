@@ -42,7 +42,7 @@ final class CountHabit extends Model
     ];
 
     /**
-     * @return MorphOne<Habit>
+     * @return MorphOne<Habit, $this>
      */
     public function habit(): MorphOne
     {
