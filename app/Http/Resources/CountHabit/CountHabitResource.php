@@ -4,28 +4,33 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\CountHabit;
 
+use App\Enums\MeasurementUnitTypeEnum;
 use App\Models\Count\CountHabit;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Resource;
 
-/**
- * @property CountHabit $resource
- */
-final class CountHabitResource extends JsonResource
+final class CountHabitResource extends Resource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
+     * @param  DataCollection<int, CountHabitEntryResource>  $entries
      */
-    public function toArray(Request $request): array
+    public function __construct(
+        public string $id,
+        public Optional|int $total,
+        public MeasurementUnitTypeEnum $measurement_unit_type,
+        public DataCollection $entries,
+        public Optional|string $created_at,
+    ) {}
+
+    public static function fromModel(CountHabit $model): self
     {
-        return [
-            'id' => $this->resource->id,
-            'total' => $this->resource->getAttribute('entries_sum_value'),
-            'measurement_type_unit' => $this->resource->measurement_unit_type->name,
-            'entries' => CountHabitEntryResource::collection($this->whenLoaded('entries')),
-            'created_at' => $this->whenNotNull($this->resource->created_at?->toDateString()),
-        ];
+        return new self(
+            id: $model->id,
+            total: $model->getAttribute('entries_sum_value'),
+            measurement_unit_type: $model->measurement_unit_type,
+            entries: CountHabitEntryResource::collect($model->entries, DataCollection::class),
+            created_at: $model->created_at?->toDayDateTimeString(),
+        );
     }
 }

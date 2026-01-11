@@ -6,26 +6,31 @@ namespace App\Http\Resources\CountHabit;
 
 use App\Http\Resources\HabitEntryNoteResource;
 use App\Models\Count\CountHabitEntry;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Resource;
 
-/**
- * @property CountHabitEntry $resource
- */
-final class CountHabitEntryResource extends JsonResource
+final class CountHabitEntryResource extends Resource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
+     * @param  DataCollection<int, HabitEntryNoteResource>  $notes
      */
-    public function toArray(Request $request): array
+    public function __construct(
+        public string $id,
+        public int $value,
+        public string $by,
+        public DataCollection $notes,
+        public Optional|string $created_at,
+    ) {}
+
+    public static function fromModel(CountHabitEntry $model): self
     {
-        return [
-            'id' => $this->resource->id,
-            'value' => $this->resource->value,
-            'notes' => HabitEntryNoteResource::collection($this->whenLoaded('entries')),
-            'created_at' => $this->whenNotNull($this->resource->created_at?->toDayDateTimeString()),
-        ];
+        return new self(
+            id: $model->id,
+            value: $model->value,
+            by: $model->user->name,
+            notes: HabitEntryNoteResource::collect($model->notes, DataCollection::class),
+            created_at: $model->created_at?->toDayDateTimeString(),
+        );
     }
 }

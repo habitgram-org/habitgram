@@ -4,6 +4,13 @@
 
 - [ ] Install Ziggy, remove Wayfinder
 - [ ] Read the docs on relationships
-- [ ] Refactor HabitEntryController::store()
-- [ ] Fix PHPStan errors
-- [ ] Add "By" to CountHabit's table
+- [X] Refactor HabitEntryController::store()
+- [X] Fix PHPStan errors
+- [X] Add "By" to CountHabit's table
+- [ ] HabitController
+  - [ ] AbstinenceHabitController
+    - [ ] AbstinenceHabitEntryController
+  - [ ] CountHabitController
+    - [ ] CountHabitEntryController
+  - [ ] DailyHabitController
+    - [ ] DailyHabitEntryController

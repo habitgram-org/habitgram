@@ -7,11 +7,14 @@ namespace App\Http\Controllers\Habit;
 use App\Enums\HabitType;
 use App\Models\Count\CountHabitEntry;
 use App\Models\Habit;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-final class HabitEntryController
+final readonly class HabitEntryController
 {
+    public function __construct(private Gate $gate) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +28,7 @@ final class HabitEntryController
      */
     public function store(Habit $habit, Request $request): void
     {
-        // TODO: Policy goes here
+        $this->gate->authorize('store', $habit);
 
         // TODO: refactor this mess
 

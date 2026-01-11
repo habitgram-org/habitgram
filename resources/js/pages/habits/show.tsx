@@ -4,7 +4,7 @@ import type { CountHabit as CountHabitType, Habit } from '@/types';
 import { Head } from '@inertiajs/react';
 import { useEffect } from 'react';
 
-export default function Show({ habit }: {habit: Habit}) {
+export default function Show({ habit }: { habit: Habit }) {
     useEffect(function () {
         console.log(habit);
     }, []);
@@ -27,7 +27,10 @@ export default function Show({ habit }: {habit: Habit}) {
                 )}
 
                 {habit.type === 'count' && (
-                    <CountHabit habitId={habit.id} habit={habit.habitable as CountHabitType} />
+                    <CountHabit
+                        habitId={habit.id}
+                        habit={habit.habitable as CountHabitType}
+                    />
                 )}
                 {/*two more...*/}
             </div>

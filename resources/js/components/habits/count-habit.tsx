@@ -1,19 +1,19 @@
-import type { CountHabit } from '@/types';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import {
-    Table, TableBody,
+    Table,
+    TableBody,
     TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { ButtonGroup } from '@/components/ui/button-group';
-import { Button } from '@/components/ui/button';
-import {PlusIcon } from 'lucide-react';
-import { router } from '@inertiajs/react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { CountHabit } from '@/types';
+import { router } from '@inertiajs/react';
+import { PlusIcon } from 'lucide-react';
 import { FormEvent } from 'react';
-
 
 interface Props {
     habit: CountHabit;
@@ -23,12 +23,15 @@ interface Props {
 export default function CountHabit({ habit, habitId }: Props) {
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
-        router.post('/habits/' + habitId + '/entries', {value: 1, type: 'count'}); // TODO: use Ziggy
+        router.post('/habits/' + habitId + '/entries', {
+            value: 1,
+            type: 'count',
+        }); // TODO: use Ziggy
     }
 
     return (
         <div className="">
-            <h1 className="mt-6 text-center text-4xl font-bold">
+            <h1 className="mt-6 text-center text-5xl font-bold">
                 {habit.total}
             </h1>
 
@@ -56,6 +59,7 @@ export default function CountHabit({ habit, habitId }: Props) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Value</TableHead>
+                                <TableHead>By</TableHead>
                                 <TableHead>Created at</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -65,6 +69,7 @@ export default function CountHabit({ habit, habitId }: Props) {
                                     <TableCell className="font-medium">
                                         {e.value}
                                     </TableCell>
+                                    <TableCell>{e.by}</TableCell>
                                     <TableCell>{e.created_at}</TableCell>
                                 </TableRow>
                             ))}

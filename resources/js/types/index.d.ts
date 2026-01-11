@@ -1,6 +1,12 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
+import { route as routeFn } from 'ziggy-js';
+
+declare global {
+    let route: typeof routeFn;
+}
+
 export interface Auth {
     user: User;
 }
@@ -78,6 +84,7 @@ export interface CountHabit {
 export interface CountHabitEntry {
     id: string;
     value: number;
+    by: string;
     notes: Array<HabitEntryNote>;
     created_at?: string;
 }

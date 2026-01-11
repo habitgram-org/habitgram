@@ -1,4 +1,3 @@
-import HabitController from '@/actions/App/Http/Controllers/HabitController';
 import {
     Item,
     ItemActions,
@@ -12,7 +11,7 @@ import { Head, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Habit } from '@/types';
 
-export default function Index({ habits }: {habits: Array<Habit>}) {
+export default function Index({ habits }: { habits: Array<Habit> }) {
     return (
         <AppLayout>
             <Head title="My Habits" />
@@ -28,8 +27,8 @@ export default function Index({ habits }: {habits: Array<Habit>}) {
                                 </ItemDescription>
                             </ItemContent>
                             <ItemActions>
-                                <Button asChild>
-                                    <Link href={HabitController.show(h.id)}>
+                                <Button variant="outline" asChild>
+                                    <Link href={route('habits.show', h.id)}>
                                         View
                                     </Link>
                                 </Button>

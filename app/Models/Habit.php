@@ -10,7 +10,6 @@ use App\Http\Resources\CountHabit\CountHabitResource;
 use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
-use App\Models\Daily\DailyHabit;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,7 +29,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string $habitable_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read CountHabit|AbstinenceHabit|DailyHabit $habitable
+ * @property-read Model $habitable
  * @property-read User|null $leader
  * @property-read HabitParticipant|null $pivot
  * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $participants

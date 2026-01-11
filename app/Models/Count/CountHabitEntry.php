@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Models\Count;
 
 use App\Models\HabitEntryNote;
+use App\Models\HabitParticipant;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
@@ -21,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property-read CountHabit $countHabit
  * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitEntryNote> $notes
  * @property-read int|null $notes_count
+ * @property-read User|null $user
  *
  * @method static \Database\Factories\Count\CountHabitEntryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry newModelQuery()
@@ -54,5 +58,20 @@ final class CountHabitEntry extends Model
     public function notes(): MorphMany
     {
         return $this->morphMany(HabitEntryNote::class, 'notable');
+    }
+
+    /**
+     * @return HasOneThrough<User, HabitParticipant, $this>
+     */
+    public function user(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            related: User::class,
+            through: HabitParticipant::class,
+            firstKey: 'id',
+            secondKey: 'id',
+            localKey: 'habit_participant_id',
+            secondLocalKey: 'user_id',
+        );
     }
 }

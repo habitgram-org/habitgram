@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Models\Abstinence\AbstinenceHabitEntry;
-use App\Models\Count\CountHabitEntry;
-use App\Models\Daily\DailyHabitEntry;
 use Database\Factories\HabitEntryNoteFactory;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string $habit_participant_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
- * @property-read AbstinenceHabitEntry|CountHabitEntry|DailyHabitEntry $notable
+ * @property-read Model $notable
  *
  * @method static \Database\Factories\HabitEntryNoteFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|HabitEntryNote newModelQuery()

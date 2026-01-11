@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Models\HabitEntryNote;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Resource;
 
-/**
- * @property HabitEntryNote $resource
- */
-final class HabitEntryNoteResource extends JsonResource
+final class HabitEntryNoteResource extends Resource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
-    {
-        return [
-            'id' => $this->resource->id,
-            'content' => $this->resource->content,
-            'created_at' => $this->whenNotNull($this->resource->created_at),
-        ];
-    }
+    public function __construct(
+        public string $id,
+        public string $content,
+        public Optional|string $created_at,
+    ) {}
 }

@@ -4,33 +4,56 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Enums\HabitType;
+use App\Http\Resources\CountHabit\CountHabitResource;
+use App\Models\Abstinence\AbstinenceHabit;
+use App\Models\Count\CountHabit;
+use App\Models\Daily\DailyHabit;
 use App\Models\Habit;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Resource;
 
-/**
- * @property Habit $resource
- */
-final class HabitResource extends JsonResource
+final class HabitResource extends Resource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    public function __construct(
+        public string $id,
+        public string $name,
+        public Optional|string $description,
+        public Optional|CountHabitResource $habitable,
+        public Optional|HabitType $type,
+        public Optional|CarbonImmutable $starts_at,
+        public Optional|CarbonImmutable $ends_at,
+        public Optional|string $started_at,
+        public Optional|CarbonImmutable $ended_at,
+        public bool $has_started,
+    ) {}
+
+    public static function fromModel(Habit $habit): self
     {
-        return [
-            'id' => $this->resource->id,
-            'name' => $this->resource->name,
-            'description' => $this->whenNotNull($this->resource->description),
-            'habitable' => $this->resource->getHabitableResource(),
-            'type' => $this->resource->getType(),
-            'starts_at' => $this->whenNotNull($this->resource->starts_at),
-            'ends_at' => $this->whenNotNull($this->resource->ends_at),
-            'started_at' => $this->whenNotNull($this->resource->started_at?->toDayDateTimeString()),
-            'ended_at' => $this->whenNotNull($this->resource->ended_at),
-            'has_started' => $this->resource->starts_at < now() || ! is_null($this->resource->started_at),
-        ];
+        return new self(
+            id: $habit->id,
+            name: $habit->name,
+            description: $habit->description ?? Optional::create(),
+            habitable: isset($habit->habitable) ? self::getHabitableResource($habit->habitable) : Optional::create(),
+            type: isset($habit->habitable) ? $habit->getType() : Optional::create(),
+            starts_at: $habit->starts_at ?? Optional::create(),
+            ends_at: $habit->ends_at ?? Optional::create(),
+            started_at: $habit->started_at?->toDayDateTimeString() ?? Optional::create(),
+            ended_at: $habit->ended_at ?? Optional::create(),
+            has_started: (isset($habit->starts_at) && $habit->starts_at < now())
+                || (isset($habit->started_at))
+        );
+    }
+
+    private static function getHabitableResource(Model $habitable)
+    {
+        return match ($habitable::class) {
+            AbstinenceHabit::class => null,
+            CountHabit::class => CountHabitResource::fromModel($habitable),
+            DailyHabit::class => null,
+            default => null,
+        };
     }
 }

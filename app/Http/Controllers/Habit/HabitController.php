@@ -21,12 +21,15 @@ final readonly class HabitController
      */
     public function index(): Response
     {
-        $this->gate->authorize('index', Habit::class);
+        $this->gate->authorize('viewAny', Habit::class);
 
-        $user = auth()->user();
+        $habits = auth()->user()
+            ->habits()
+            ->select(['habits.id', 'habits.name', 'habits.description'])
+            ->get();
 
         return inertia('habits/index', [
-            'habits' => HabitResource::collection($user->habits),
+            'habits' => HabitResource::collect($habits),
         ]);
     }
 
@@ -53,13 +56,13 @@ final readonly class HabitController
     {
         $this->gate->authorize('view', $habit);
 
-        $habit->load('habitable.entries.notes')
+        $habit->load(['habitable.entries.user', 'habitable.entries.notes'])
             ->loadMorphSum('habitable', [
                 CountHabit::class => ['entries'],
             ], 'value');
 
         return inertia('habits/show', [
-            'habit' => new HabitResource($habit),
+            'habit' => HabitResource::fromModel($habit),
         ]);
     }
 
