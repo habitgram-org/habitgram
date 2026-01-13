@@ -40,14 +40,14 @@ final class HabitResource extends Resource
             type: isset($habit->habitable) ? $habit->getType() : Optional::create(),
             starts_at: $habit->starts_at ?? Optional::create(),
             ends_at: $habit->ends_at ?? Optional::create(),
-            started_at: $habit->started_at?->toDayDateTimeString() ?? Optional::create(),
+            started_at: isset($habit->started_at) ? $habit->started_at->toDayDateTimeString() : Optional::create(),
             ended_at: $habit->ended_at ?? Optional::create(),
             has_started: (isset($habit->starts_at) && $habit->starts_at < now())
                 || (isset($habit->started_at))
         );
     }
 
-    private static function getHabitableResource(Model $habitable)
+    private static function getHabitableResource(Model $habitable): ?CountHabitResource
     {
         return match ($habitable::class) {
             AbstinenceHabit::class => null,
