@@ -98,7 +98,7 @@ final class Habit extends Model
     {
         return match ($this->habitable::class) {
             AbstinenceHabit::class => new AbstinenceHabitResource($this->habitable),
-            CountHabit::class => new CountHabitResource($this->habitable),
+            CountHabit::class => CountHabitResource::fromModel($this->habitable),
             default => new DailyHabitResource($this->habitable),
         };
     }

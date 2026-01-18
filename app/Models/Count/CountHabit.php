@@ -54,6 +54,6 @@ final class CountHabit extends Model
      */
     public function entries(): HasMany
     {
-        return $this->hasMany(CountHabitEntry::class)->latest();
+        return $this->hasMany(CountHabitEntry::class)->limit(10)->latest();
     }
 }

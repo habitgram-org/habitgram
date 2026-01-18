@@ -76,7 +76,7 @@ export interface AbstinenceHabit {
 export interface CountHabit {
     id: string;
     total: number;
-    measurement_type_unit: string;
+    measurement_unit_type: string;
     entries: Array<CountHabitEntry>;
     created_at?: string;
 }

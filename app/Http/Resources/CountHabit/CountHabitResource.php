@@ -18,7 +18,7 @@ final class CountHabitResource extends Resource
     public function __construct(
         public string $id,
         public Optional|int $total,
-        public MeasurementUnitTypeEnum $measurement_unit_type,
+        public string $measurement_unit_type,
         public DataCollection $entries,
         public Optional|string $created_at,
     ) {}
@@ -28,7 +28,7 @@ final class CountHabitResource extends Resource
         return new self(
             id: $model->id,
             total: $model->getAttribute('entries_sum_value'),
-            measurement_unit_type: $model->measurement_unit_type,
+            measurement_unit_type: $model->measurement_unit_type->name,
             entries: CountHabitEntryResource::collect($model->entries, DataCollection::class),
             created_at: $model->created_at?->toDayDateTimeString(),
         );

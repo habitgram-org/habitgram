@@ -36,7 +36,7 @@ final class HabitResource extends Resource
             id: $habit->id,
             name: $habit->name,
             description: $habit->description ?? Optional::create(),
-            habitable: isset($habit->habitable) ? self::getHabitableResource($habit->habitable) : Optional::create(),
+            habitable: isset($habit->habitable) ? $habit->getHabitableResource() : Optional::create(),
             type: isset($habit->habitable) ? $habit->getType() : Optional::create(),
             starts_at: $habit->starts_at ?? Optional::create(),
             ends_at: $habit->ends_at ?? Optional::create(),
@@ -45,15 +45,5 @@ final class HabitResource extends Resource
             has_started: (isset($habit->starts_at) && $habit->starts_at < now())
                 || (isset($habit->started_at))
         );
-    }
-
-    private static function getHabitableResource(Model $habitable): ?CountHabitResource
-    {
-        return match ($habitable::class) {
-            AbstinenceHabit::class => null,
-            CountHabit::class => CountHabitResource::fromModel($habitable),
-            DailyHabit::class => null,
-            default => null,
-        };
     }
 }
