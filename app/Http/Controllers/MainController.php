@@ -15,7 +15,9 @@ final class MainController
                 return inertia('auth/verify-email');
             }
 
-            return inertia('home', ['username' => auth()->user()->username]);
+            return inertia('home', [
+                'habits' => [],
+            ]);
         }
 
         return inertia('auth/login');
