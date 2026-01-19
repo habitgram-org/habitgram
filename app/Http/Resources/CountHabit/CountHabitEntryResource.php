@@ -28,7 +28,7 @@ final class CountHabitEntryResource extends Resource
         return new self(
             id: $model->id,
             value: $model->value,
-            by: $model->user->name,
+            by: $model->user->username,
             notes: HabitEntryNoteResource::collect($model->notes, DataCollection::class),
             created_at: $model->created_at?->toDayDateTimeString(),
         );

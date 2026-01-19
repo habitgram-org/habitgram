@@ -2,22 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests\Habit;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Laravel\Fortify\Features;
-use Laravel\Fortify\InteractsWithTwoFactorState;
 
-final class TwoFactorAuthenticationRequest extends FormRequest
+final class StoreHabitRequest extends FormRequest
 {
-    use InteractsWithTwoFactorState;
-
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Features::enabled(Features::twoFactorAuthentication());
+        return false;
     }
 
     /**
@@ -27,6 +23,8 @@ final class TwoFactorAuthenticationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 }

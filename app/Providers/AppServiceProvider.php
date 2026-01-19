@@ -7,7 +7,6 @@ namespace App\Providers;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -30,8 +29,6 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Auth::loginUsingId('019b97fa-109f-725e-9ef8-b6fe7d2fc086');
-
         $this->configureCommands();
         $this->configureModels();
         $this->configureDates();

@@ -22,6 +22,6 @@ final class CreateHabitEntry
      */
     public function run(): void
     {
-        DB::transaction(function () {});
+        DB::transaction(function (): void {});
     }
 }

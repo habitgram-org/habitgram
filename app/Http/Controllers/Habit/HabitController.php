@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Habit;
 
-use App\Http\Requests\StoreHabitRequest;
-use App\Http\Requests\UpdateHabitRequest;
+use App\Http\Requests\Habit\StoreHabitRequest;
+use App\Http\Requests\Habit\UpdateHabitRequest;
 use App\Http\Resources\HabitResource;
 use App\Models\Count\CountHabit;
 use App\Models\Habit;

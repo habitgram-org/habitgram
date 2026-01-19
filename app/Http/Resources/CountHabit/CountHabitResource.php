@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\CountHabit;
 
-use App\Enums\MeasurementUnitTypeEnum;
 use App\Models\Count\CountHabit;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Optional;

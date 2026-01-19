@@ -6,12 +6,8 @@ namespace App\Http\Resources;
 
 use App\Enums\HabitType;
 use App\Http\Resources\CountHabit\CountHabitResource;
-use App\Models\Abstinence\AbstinenceHabit;
-use App\Models\Count\CountHabit;
-use App\Models\Daily\DailyHabit;
 use App\Models\Habit;
 use Carbon\CarbonImmutable;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
 
