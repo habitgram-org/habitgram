@@ -22,7 +22,7 @@ final class HabitPolicy
      */
     public function view(User $user, Habit $habit): bool
     {
-        return $habit->participants->contains('id', $user->id);
+        return $habit->users->contains('id', $user->id);
     }
 
     /**
@@ -46,7 +46,7 @@ final class HabitPolicy
      */
     public function delete(User $user, Habit $habit): bool
     {
-        return false;
+        return $this->isLeader($user, $habit);
     }
 
     /**
@@ -63,5 +63,10 @@ final class HabitPolicy
     public function forceDelete(User $user, Habit $habit): bool
     {
         return false;
+    }
+
+    private function isLeader(User $user, Habit $habit): bool
+    {
+        return $habit->leader->id === $user->id;
     }
 }

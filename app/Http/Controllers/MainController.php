@@ -15,8 +15,8 @@ final class MainController
                 return inertia('auth/verify-email');
             }
 
-            return inertia('home', [
-                'habits' => [],
+            return inertia('habits/show', [
+                'habit' => [],
             ]);
         }
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Count;
 
-use App\Enums\MeasurementUnitTypeEnum;
+use App\Enums\UnitType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +20,8 @@ final class CountHabitFactory extends Factory
     public function definition(): array
     {
         return [
-            'measurement_unit_type' => fake()->randomElement(MeasurementUnitTypeEnum::class),
+            'unit' => fake()->randomElement(UnitType::class),
+            'goal' => fake()->optional()->numberBetween(100_000, 1_000_000),
         ];
     }
 }

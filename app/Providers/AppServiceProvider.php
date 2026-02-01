@@ -30,7 +30,8 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Auth::loginUsingId('019bd6f0-4da1-71b0-90dc-ea3981846764');
+        Auth::loginUsingId('019c18b5-b198-705d-bf99-bcd7dc1ea26f');
+
         $this->configureCommands();
         $this->configureModels();
         $this->configureDates();

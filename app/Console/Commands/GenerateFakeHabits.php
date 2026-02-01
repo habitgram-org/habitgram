@@ -12,11 +12,11 @@ use App\Models\Count\CountHabitEntry;
 use App\Models\Daily\DailyHabit;
 use App\Models\Daily\DailyHabitEntry;
 use App\Models\Habit;
-use App\Models\HabitEntryNote;
 use App\Models\HabitParticipant;
 use App\Models\User;
 use Illuminate\Console\Command;
 use LogicException;
+use Random\RandomException;
 
 use function Laravel\Prompts\select;
 
@@ -26,6 +26,9 @@ final class GenerateFakeHabits extends Command
 
     protected $description = 'Generate random fake habits';
 
+    /**
+     * @throws RandomException
+     */
     public function handle(): int
     {
         $type = select('Which type?', HabitType::values());
@@ -74,11 +77,6 @@ final class GenerateFakeHabits extends Command
                     )
                 } => $habit->habitable_id,
             ])
-            ->has(
-                factory: HabitEntryNote::factory()
-                    ->state(['habit_participant_id' => $participant->id]),
-                relationship: 'notes'
-            )
             ->create();
 
         $this->info('Fake habits were successfully generated.');

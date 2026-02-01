@@ -19,7 +19,8 @@ final class CountHabitEntryFactory extends Factory
     public function definition(): array
     {
         return [
-            'value' => fake()->numberBetween(1, 1_000),
+            'amount' => fake()->numberBetween(1, 1_000),
+            'note' => fake()->optional(0.25)->realText(),
         ];
     }
 }

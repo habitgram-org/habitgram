@@ -12,3 +12,4 @@ Route::controller(ProfileController::class)->group(function (): void {
 });
 
 require __DIR__.'/auth.php';
+require __DIR__.'/habits.php';

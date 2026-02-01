@@ -1,12 +1,6 @@
 import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
-import { route as routeFn } from 'ziggy-js';
-
-declare global {
-    let route: typeof routeFn;
-}
-
 export interface Auth {
     user: User;
 }
@@ -60,6 +54,7 @@ export interface Habit {
     started_at?: string;
     ended_at?: string;
     has_started: boolean;
+    is_public: boolean;
 }
 
 enum HabitType {
@@ -73,19 +68,32 @@ export interface AbstinenceHabit {
     created_at?: string;
 }
 
+export interface AbstinenceHabitEntry {
+    id: string;
+    happened_at: string;
+    reason: string;
+    created_at?: string;
+}
+
 export interface CountHabit {
     id: string;
     total: number;
-    measurement_unit_type: string;
+    unit: string;
     entries: Array<CountHabitEntry>;
     created_at?: string;
+    quick_amounts: Array<number>;
+    notes_count: number;
+    streak_days: number;
+    average_per_day: number;
+    goal?: number;
+    progress?: number;
+    remaining_amount?: number;
 }
 
 export interface CountHabitEntry {
     id: string;
-    value: number;
-    by: string;
-    notes: Array<HabitEntryNote>;
+    amount: number;
+    note?: string;
     created_at?: string;
 }
 
@@ -96,10 +104,6 @@ export interface DailyHabit {
 
 export interface DailyHabitEntry {
     id: string;
-}
-
-export interface HabitEntryNote {
-    id: string;
-    content: string;
+    note?: string;
     created_at?: string;
 }

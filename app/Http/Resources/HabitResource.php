@@ -24,6 +24,7 @@ final class HabitResource extends Resource
         public Optional|string $started_at,
         public Optional|CarbonImmutable $ended_at,
         public bool $has_started,
+        public bool $is_public,
     ) {}
 
     public static function fromModel(Habit $habit): self
@@ -36,10 +37,11 @@ final class HabitResource extends Resource
             type: isset($habit->habitable) ? $habit->getType() : Optional::create(),
             starts_at: $habit->starts_at ?? Optional::create(),
             ends_at: $habit->ends_at ?? Optional::create(),
-            started_at: isset($habit->started_at) ? $habit->started_at->toDayDateTimeString() : Optional::create(),
+            started_at: isset($habit->started_at) ? $habit->started_at->format('M j, Y') : Optional::create(),
             ended_at: $habit->ended_at ?? Optional::create(),
             has_started: (isset($habit->starts_at) && $habit->starts_at < now())
-                || (isset($habit->started_at))
+                || (isset($habit->started_at)),
+            is_public: $habit->is_public,
         );
     }
 }

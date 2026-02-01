@@ -21,10 +21,11 @@ final class HabitFactory extends Factory
         return [
             'name' => fake()->words(2, asText: true),
             'description' => fake()->optional()->text(),
-            'starts_at' => fake()->optional()->dateTimeBetween(now()->subYear()),
-            'ends_at' => fake()->optional()->dateTimeBetween(now()->subYear()),
-            'started_at' => fake()->optional()->dateTimeBetween(now()->subYear()),
-            'ended_at' => fake()->optional()->dateTimeBetween(now()->subYear()),
+            'starts_at' => null,
+            'ends_at' => null,
+            'started_at' => fake()->dateTimeBetween(now()->subYear()),
+            'ended_at' => null,
+            'is_public' => fake()->boolean(),
         ];
     }
 }

@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models\Daily;
 
-use App\Models\HabitEntryNote;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property string $id
@@ -19,9 +17,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @property string $habit_participant_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property string|null $note
  * @property-read DailyHabit $dailyHabit
- * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitEntryNote> $notes
- * @property-read int|null $notes_count
  *
  * @method static \Database\Factories\Daily\DailyHabitEntryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry newModelQuery()
@@ -32,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry whereFailedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry whereHabitParticipantId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry whereSucceededAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabitEntry whereUpdatedAt($value)
  *
@@ -48,13 +46,5 @@ final class DailyHabitEntry extends Model
     public function dailyHabit(): BelongsTo
     {
         return $this->belongsTo(DailyHabit::class);
-    }
-
-    /**
-     * @return MorphMany<HabitEntryNote, $this>
-     */
-    public function notes(): MorphMany
-    {
-        return $this->morphMany(HabitEntryNote::class, 'notable');
     }
 }

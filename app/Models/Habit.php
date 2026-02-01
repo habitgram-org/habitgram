@@ -14,8 +14,10 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
@@ -29,40 +31,51 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
  * @property string $habitable_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property bool $is_public
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property-read Model $habitable
  * @property-read User|null $leader
- * @property-read HabitParticipant|null $pivot
- * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $participants
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitParticipant> $participants
  * @property-read int|null $participants_count
+ * @property-read HabitParticipant|null $pivot
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, User> $users
+ * @property-read int|null $users_count
  *
  * @method static \Database\Factories\HabitFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereEndedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereHabitableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereHabitableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereIsPublic($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit withoutTrashed()
  *
  * @mixin \Eloquent
  */
 final class Habit extends Model
 {
     /** @use HasFactory<\Database\Factories\HabitFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $casts = [
         'started_at' => 'immutable_datetime',
         'ended_at' => 'immutable_datetime',
         'starts_at' => 'immutable_datetime',
         'ends_at' => 'immutable_datetime',
+        'deleted_at' => 'immutable_datetime',
+        'is_public' => 'boolean',
     ];
 
     /**
@@ -87,20 +100,30 @@ final class Habit extends Model
     }
 
     /**
+     * @return HasMany<HabitParticipant, $this>
+     */
+    public function participants(): HasMany
+    {
+        return $this->hasMany(HabitParticipant::class);
+    }
+
+    /**
      * @return BelongsToMany<User, $this, HabitParticipant>
      */
-    public function participants(): BelongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'habit_participant')->using(HabitParticipant::class);
     }
 
-    public function getHabitableResource(): AbstinenceHabitResource|CountHabitResource|DailyHabitResource
+    public function getHabitableResource(): CountHabitResource|null
     {
-        return match ($this->habitable::class) {
-            AbstinenceHabit::class => new AbstinenceHabitResource($this->habitable),
-            CountHabit::class => CountHabitResource::fromModel($this->habitable),
-            default => new DailyHabitResource($this->habitable),
-        };
+        if ($this->habitable::class === CountHabit::class) {
+            assert($this->habitable instanceof CountHabit);
+
+            return CountHabitResource::fromModel($this->habitable);
+        }
+
+        return null;
     }
 
     public function getType(): HabitType

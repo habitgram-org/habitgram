@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\DailyHabit;
 
-use App\Http\Resources\HabitEntryNoteResource;
 use App\Models\Daily\DailyHabitEntry;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,7 +24,6 @@ final class DailyHabitEntryResource extends JsonResource
             'id' => $this->resource->id,
             'failed_at' => $this->whenNotNull($this->resource->failed_at),
             'succeeded_at' => $this->whenNotNull($this->resource->succeeded_at),
-            'notes' => HabitEntryNoteResource::collection($this->whenLoaded('notes')),
             'created_at' => $this->resource->created_at,
         ];
     }

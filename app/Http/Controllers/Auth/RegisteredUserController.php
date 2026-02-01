@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Auth;
 use App\Actions\Auth\CreateNewUser;
 use App\Http\Requests\Auth\StoreUserRequest;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Throwable;
 
@@ -20,7 +21,7 @@ final class RegisteredUserController
     /**
      * @throws Throwable
      */
-    public function store(StoreUserRequest $request, CreateNewUser $createNewUser)
+    public function store(StoreUserRequest $request, CreateNewUser $createNewUser): RedirectResponse
     {
         $user = $createNewUser->run($request->getDTO());
 

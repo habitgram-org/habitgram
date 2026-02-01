@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Habit;
 
-use App\Http\Requests\Habit\StoreHabitRequest;
-use App\Http\Requests\Habit\UpdateHabitRequest;
+use App\Actions\Habit\DeleteHabit;
 use App\Http\Resources\HabitResource;
 use App\Models\Count\CountHabit;
 use App\Models\Habit;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Inertia\Response;
+use Throwable;
 
 final readonly class HabitController
 {
     public function __construct(private Gate $gate) {}
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): Response
     {
         $this->gate->authorize('viewAny', Habit::class);
@@ -33,33 +30,19 @@ final readonly class HabitController
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): void
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreHabitRequest $request): void
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Habit $habit): Response
     {
         $this->gate->authorize('view', $habit);
 
-        $habit->load(['habitable.entries.user', 'habitable.entries.notes'])
+        $habit->load(['habitable.entries', 'users'])
             ->loadMorphSum('habitable', [
                 CountHabit::class => ['entries'],
-            ], 'value');
+            ], 'amount')
+            ->loadMorphAvg('habitable', [
+                CountHabit::class => ['entries'],
+            ], 'amount');
+
+        //        dd(HabitResource::fromModel($habit));
 
         return inertia('habits/show', [
             'habit' => HabitResource::fromModel($habit),
@@ -67,26 +50,14 @@ final readonly class HabitController
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * @throws Throwable
      */
-    public function edit(Habit $habit): void
+    public function destroy(Habit $habit, DeleteHabit $deleteHabit): Response
     {
-        //
-    }
+        $this->gate->authorize('delete', $habit);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateHabitRequest $request, Habit $habit): void
-    {
-        //
-    }
+        $deleteHabit->run($habit);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Habit $habit): void
-    {
-        //
+        return inertia('habits/index');
     }
 }
