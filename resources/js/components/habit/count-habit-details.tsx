@@ -10,6 +10,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
@@ -17,7 +24,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { CountHabit, Habit, SharedData } from '@/types';
-import { Form, usePage } from '@inertiajs/react';
+import { Form, useForm, usePage } from '@inertiajs/react';
 import {
     Calendar,
     FileText,
@@ -27,6 +34,7 @@ import {
     MoreVertical,
     Plus,
     Target,
+    Trash2Icon,
     TrendingUp,
     Zap,
 } from 'lucide-react';
@@ -38,6 +46,9 @@ interface Props {
 }
 
 export default function CountHabitDetails({ habit }: Props) {
+    const { delete: destroy } = useForm();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const { flash } = usePage();
     const { quote } = usePage<SharedData>().props;
     const unit = (habit.habitable as CountHabit).unit;
@@ -48,30 +59,14 @@ export default function CountHabitDetails({ habit }: Props) {
     const quickAmounts = (habit.habitable as CountHabit).quick_amounts;
     const notes_count = (habit.habitable as CountHabit).notes_count;
     const entries = (habit.habitable as CountHabit).entries;
+    const notes = (habit.habitable as CountHabit).notes;
     const streak = (habit.habitable as CountHabit).streak_days;
     const average_per_day = (habit.habitable as CountHabit).average_per_day;
 
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-    const formatTimestamp = (date: Date) => {
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-
-        if (diffHours < 1) {
-            const diffMins = Math.floor(diffMs / (1000 * 60));
-            return diffMins <= 1 ? 'Just now' : `${diffMins} minutes ago`;
-        } else if (diffHours < 24) {
-            return `${diffHours} hour ${diffHours > 1 ? 's' : ''} ago`;
-        } else if (diffHours < 48) {
-            return 'Yesterday';
-        } else {
-            return date.toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-            });
-        }
-    };
+    function handleDelete() {
+        setIsDeleteDialogOpen(false);
+        destroy(route('habits.destroy', { habit: habit.id }));
+    }
 
     useEffect(() => {
         if (flash?.newly_added_amount) {
@@ -104,11 +99,60 @@ export default function CountHabitDetails({ habit }: Props) {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="ghost" size="icon">
-                            <MoreVertical className="size-5" />
-                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <MoreVertical className="size-5" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem
+                                        variant="destructive"
+                                        onSelect={(e) => {
+                                            e.preventDefault();
+                                            setIsDeleteDialogOpen(true);
+                                        }}
+                                    >
+                                        <Trash2Icon className="mr-2 size-4" />
+                                        Delete
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
+
+                <Dialog
+                    open={isDeleteDialogOpen}
+                    onOpenChange={setIsDeleteDialogOpen}
+                >
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Are you absolutely sure?</DialogTitle>
+                            <DialogDescription>
+                                This action cannot be undone. This will
+                                permanently delete this habit.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setIsDeleteDialogOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="button"
+                                onClick={handleDelete}
+                                variant="destructive"
+                            >
+                                Delete
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
                 {/* Main Count Display */}
                 <Card className="border-emerald-100 bg-gradient-to-br from-emerald-50 to-teal-50 p-8 md:p-12">
@@ -282,12 +326,7 @@ export default function CountHabitDetails({ habit }: Props) {
                                                 +{entry.amount} {unit}
                                             </p>
                                             <p className="text-xs text-slate-500">
-                                                {entry.created_at &&
-                                                    formatTimestamp(
-                                                        new Date(
-                                                            entry.created_at,
-                                                        ),
-                                                    )}
+                                                {entry.created_at}
                                             </p>
                                         </div>
                                         {entry.note && (
@@ -323,36 +362,24 @@ export default function CountHabitDetails({ habit }: Props) {
                                 </div>
                             </Card>
                         ) : (
-                            entries.map(
-                                (entry) =>
-                                    entry.note && (
-                                        <Card key={entry.id} className="p-6">
-                                            <div className="space-y-3">
-                                                <div className="flex items-start justify-between">
-                                                    <div className="space-y-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <Badge variant="secondary">
-                                                                +{entry.amount}{' '}
-                                                                {unit}
-                                                            </Badge>
-                                                            <span className="text-xs text-slate-500">
-                                                                {entry.created_at &&
-                                                                    formatTimestamp(
-                                                                        new Date(
-                                                                            entry.created_at,
-                                                                        ),
-                                                                    )}
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                            notes.map((note, index) => (
+                                <Card key={index} className="p-6">
+                                    <div className="space-y-3">
+                                        <div className="flex items-start justify-between">
+                                            <div className="space-y-1">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-slate-500">
+                                                        {note.created_at}
+                                                    </span>
                                                 </div>
-                                                <p className="text-sm leading-relaxed text-slate-700">
-                                                    {entry.note}
-                                                </p>
                                             </div>
-                                        </Card>
-                                    ),
-                            )
+                                        </div>
+                                        <p className="text-sm leading-relaxed text-slate-700">
+                                            {note.note}
+                                        </p>
+                                    </div>
+                                </Card>
+                            ))
                         )}
                     </TabsContent>
                 </Tabs>

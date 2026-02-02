@@ -1,5 +1,3 @@
-interface Props {}
-
-export default function Index({}: Props) {
+export default function Index() {
     return <div></div>;
 }

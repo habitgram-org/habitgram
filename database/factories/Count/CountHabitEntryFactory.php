@@ -21,6 +21,8 @@ final class CountHabitEntryFactory extends Factory
         return [
             'amount' => fake()->numberBetween(1, 1_000),
             'note' => fake()->optional(0.25)->realText(),
+            'created_at' => fake()->dateTimeBetween('-1 year'),
+            'updated_at' => fake()->dateTimeBetween('-1 year'),
         ];
     }
 }

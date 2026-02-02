@@ -65,6 +65,11 @@ final class HabitPolicy
         return false;
     }
 
+    public function isParticipant(User $user, Habit $habit): bool
+    {
+        return $habit->participants()->where('user_id', $user->id)->exists();
+    }
+
     private function isLeader(User $user, Habit $habit): bool
     {
         return $habit->leader->id === $user->id;

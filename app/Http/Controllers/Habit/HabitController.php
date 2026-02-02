@@ -9,6 +9,7 @@ use App\Http\Resources\HabitResource;
 use App\Models\Count\CountHabit;
 use App\Models\Habit;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Throwable;
 
@@ -37,12 +38,7 @@ final readonly class HabitController
         $habit->load(['habitable.entries', 'users'])
             ->loadMorphSum('habitable', [
                 CountHabit::class => ['entries'],
-            ], 'amount')
-            ->loadMorphAvg('habitable', [
-                CountHabit::class => ['entries'],
             ], 'amount');
-
-        //        dd(HabitResource::fromModel($habit));
 
         return inertia('habits/show', [
             'habit' => HabitResource::fromModel($habit),
@@ -52,12 +48,12 @@ final readonly class HabitController
     /**
      * @throws Throwable
      */
-    public function destroy(Habit $habit, DeleteHabit $deleteHabit): Response
+    public function destroy(Habit $habit, DeleteHabit $deleteHabit): RedirectResponse
     {
         $this->gate->authorize('delete', $habit);
 
         $deleteHabit->run($habit);
 
-        return inertia('habits/index');
+        return to_route('habits.index');
     }
 }

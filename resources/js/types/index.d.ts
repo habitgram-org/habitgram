@@ -80,6 +80,7 @@ export interface CountHabit {
     total: number;
     unit: string;
     entries: Array<CountHabitEntry>;
+    notes: Array<EntryNote>;
     created_at?: string;
     quick_amounts: Array<number>;
     notes_count: number;
@@ -105,5 +106,10 @@ export interface DailyHabit {
 export interface DailyHabitEntry {
     id: string;
     note?: string;
+    created_at?: string;
+}
+
+export interface EntryNote {
+    note: string;
     created_at?: string;
 }

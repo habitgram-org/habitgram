@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
@@ -42,7 +43,7 @@ use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 final class CountHabitEntry extends Model
 {
     /** @use HasFactory<\Database\Factories\Count\CountHabitEntryFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     /**
      * @return BelongsTo<CountHabit, $this>

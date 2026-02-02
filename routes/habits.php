@@ -20,7 +20,6 @@ Route::middleware(['auth', 'verified'])->as('habits.')->prefix('/habits')->group
         /* Count Habit Entry */
         Route::as('entries.')->prefix('{countHabit}/entries')->group(function (): void {
             Route::post('', [CountHabitEntryController::class, 'store'])->name('store');
-            Route::patch('{countHabitEntry}', [CountHabitEntryController::class, 'update'])->name('update');
             Route::delete('{countHabitEntry}', [CountHabitEntryController::class, 'destroy'])->name('destroy');
         });
     });

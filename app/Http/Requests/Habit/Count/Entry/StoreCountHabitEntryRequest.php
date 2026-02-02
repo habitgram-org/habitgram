@@ -18,7 +18,7 @@ final class StoreCountHabitEntryRequest extends FormRequest
     {
         return [
             'amount' => ['required', 'integer', 'gt:0', 'max:10000'],
-            'note' => ['sometimes', 'string', 'min:5', 'max:200'],
+            'note' => ['sometimes', 'nullable', 'string', 'min:5', 'max:200'],
         ];
     }
 

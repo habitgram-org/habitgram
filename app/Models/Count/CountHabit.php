@@ -6,12 +6,15 @@ namespace App\Models\Count;
 
 use App\Enums\UnitType;
 use App\Models\Habit;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property string $id
@@ -27,22 +30,23 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property-read mixed $remaining_amount
  *
  * @method static \Database\Factories\Count\CountHabitFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereGoal($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereUnit($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabit whereUpdatedAt($value)
+ * @method static Builder<static>|CountHabit newModelQuery()
+ * @method static Builder<static>|CountHabit newQuery()
+ * @method static Builder<static>|CountHabit query()
+ * @method static Builder<static>|CountHabit quickAmounts()
+ * @method static Builder<static>|CountHabit whereCreatedAt($value)
+ * @method static Builder<static>|CountHabit whereDeletedAt($value)
+ * @method static Builder<static>|CountHabit whereGoal($value)
+ * @method static Builder<static>|CountHabit whereId($value)
+ * @method static Builder<static>|CountHabit whereUnit($value)
+ * @method static Builder<static>|CountHabit whereUpdatedAt($value)
  *
  * @mixin \Eloquent
  */
 final class CountHabit extends Model
 {
     /** @use HasFactory<\Database\Factories\Count\CountHabitFactory> */
-    use HasFactory, HasUuids;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $casts = [
         'unit' => UnitType::class,
@@ -61,9 +65,7 @@ final class CountHabit extends Model
      */
     public function entries(): HasMany
     {
-        return $this->hasMany(CountHabitEntry::class)
-            ->limit(5)
-            ->latest();
+        return $this->hasMany(CountHabitEntry::class);
     }
 
     /**
@@ -72,7 +74,9 @@ final class CountHabit extends Model
     public function progress(): Attribute
     {
         return Attribute::make(
-            get: fn () => (int) ((int) $this->getAttribute('entries_sum_amount') / $this->goal * 100),
+            get: fn () => ! is_null($this->goal) ? (int) ((int) $this->getAttribute(
+                'entries_sum_amount'
+            ) / $this->goal * 100) : null,
         );
     }
 
@@ -84,5 +88,18 @@ final class CountHabit extends Model
         return Attribute::make(
             get: fn () => isset($this->goal) ? (int) ($this->goal - $this->getAttribute('entries_sum_amount')) : null,
         );
+    }
+
+    /**
+     * @param  Builder<CountHabit>  $query
+     */
+    #[Scope]
+    protected function quickAmounts(Builder $query): void
+    {
+        $query->entries()
+            ->select(['amount'])
+            ->groupBy('amount')
+            ->orderByRaw('COUNT(amount) DESC')
+            ->limit(3);
     }
 }

@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\HabitType;
-use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
 use App\Http\Resources\CountHabit\CountHabitResource;
-use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -95,6 +93,7 @@ final class Habit extends Model
             related: User::class,
             through: HabitParticipant::class,
             firstKey: 'habit_id',
+            secondKey: 'id',
             secondLocalKey: 'user_id'
         )->where('habit_participant.is_leader', true);
     }
@@ -115,7 +114,7 @@ final class Habit extends Model
         return $this->belongsToMany(User::class, 'habit_participant')->using(HabitParticipant::class);
     }
 
-    public function getHabitableResource(): CountHabitResource|null
+    public function getHabitableResource(): ?CountHabitResource
     {
         if ($this->habitable::class === CountHabit::class) {
             assert($this->habitable instanceof CountHabit);

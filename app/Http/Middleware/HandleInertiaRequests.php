@@ -6,7 +6,6 @@ namespace App\Http\Middleware;
 
 use App\Services\InspiringService;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Inertia\Middleware;
 
 final class HandleInertiaRequests extends Middleware
@@ -39,16 +38,26 @@ final class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = InspiringService::quotes()->random();
-
         return [
             ...parent::share($request),
             'name' => config('app.name'),
-            'quote' => Inertia::once(fn () => ['message' => $message, 'author' => $author]),
             'auth' => [
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * @return array<string, mixed>|callable[]|\Inertia\OnceProp[]
+     */
+    public function shareOnce(Request $request): array
+    {
+        $shared = parent::shareOnce($request);
+
+        [$message, $author] = InspiringService::quotes()->random();
+        $shared['quote'] = fn () => ['message' => $message, 'author' => $author];
+
+        return $shared;
     }
 }

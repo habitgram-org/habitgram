@@ -65,7 +65,7 @@ final class GenerateFakeHabits extends Command
             ])
             ->create();
         $entryable::factory()
-            ->count(random_int(1, 20))
+            ->count(random_int(1, 100))
             ->state([
                 'habit_participant_id' => $participant->id,
                 match ($habitable) {

@@ -13,7 +13,6 @@ final class CountHabitEntryResource extends Resource
     public function __construct(
         public string $id,
         public int $amount,
-        public Optional|string $note,
         public Optional|string $created_at,
     ) {}
 
@@ -22,8 +21,7 @@ final class CountHabitEntryResource extends Resource
         return new self(
             id: $countHabitEntry->id,
             amount: $countHabitEntry->amount,
-            note: $countHabitEntry->note ?? Optional::create(),
-            created_at: $countHabitEntry->created_at?->toDayDateTimeString(),
+            created_at: $countHabitEntry->created_at?->shortRelativeDiffForHumans(),
         );
     }
 }
