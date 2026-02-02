@@ -6,7 +6,6 @@ namespace App\Models\Count;
 
 use App\Enums\UnitType;
 use App\Models\Habit;
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -33,7 +32,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder<static>|CountHabit newModelQuery()
  * @method static Builder<static>|CountHabit newQuery()
  * @method static Builder<static>|CountHabit query()
- * @method static Builder<static>|CountHabit quickAmounts()
  * @method static Builder<static>|CountHabit whereCreatedAt($value)
  * @method static Builder<static>|CountHabit whereDeletedAt($value)
  * @method static Builder<static>|CountHabit whereGoal($value)
@@ -88,18 +86,5 @@ final class CountHabit extends Model
         return Attribute::make(
             get: fn () => isset($this->goal) ? (int) ($this->goal - $this->getAttribute('entries_sum_amount')) : null,
         );
-    }
-
-    /**
-     * @param  Builder<CountHabit>  $query
-     */
-    #[Scope]
-    protected function quickAmounts(Builder $query): void
-    {
-        $query->entries()
-            ->select(['amount'])
-            ->groupBy('amount')
-            ->orderByRaw('COUNT(amount) DESC')
-            ->limit(3);
     }
 }
