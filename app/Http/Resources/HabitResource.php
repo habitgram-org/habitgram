@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Resources;
 
 use App\Enums\HabitType;
+use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
 use App\Http\Resources\CountHabit\CountHabitResource;
+use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Habit;
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Optional;
@@ -17,7 +19,7 @@ final class HabitResource extends Resource
         public string $id,
         public string $name,
         public Optional|string $description,
-        public Optional|CountHabitResource $habitable,
+        public Optional|CountHabitResource|AbstinenceHabitResource|DailyHabitResource $habitable,
         public Optional|HabitType $type,
         public Optional|CarbonImmutable $starts_at,
         public Optional|CarbonImmutable $ends_at,

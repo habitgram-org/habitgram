@@ -21,13 +21,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property string|null $note
- * @property string|null $deleted_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property-read CountHabit $countHabit
  * @property-read User|null $user
  *
  * @method static \Database\Factories\Count\CountHabitEntryFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry whereCountHabitId($value)
@@ -37,6 +38,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry whereNote($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CountHabitEntry withoutTrashed()
  *
  * @mixin \Eloquent
  */

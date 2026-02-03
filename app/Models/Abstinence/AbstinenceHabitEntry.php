@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $id
- * @property string $happened_at
+ * @property \Carbon\CarbonImmutable $happened_at
  * @property string $abstinence_habit_id
  * @property string $habit_participant_id
  * @property \Carbon\CarbonImmutable|null $created_at
@@ -37,6 +37,10 @@ final class AbstinenceHabitEntry extends Model
 {
     /** @use HasFactory<\Database\Factories\Abstinence\AbstinenceHabitEntryFactory> */
     use HasFactory, HasUuids;
+
+    protected $casts = [
+        'happened_at' => 'immutable_datetime',
+    ];
 
     /**
      * @return BelongsTo<AbstinenceHabit, $this>

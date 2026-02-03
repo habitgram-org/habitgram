@@ -1,17 +1,17 @@
-import CountHabitDetails from '@/components/habit/count-habit-details';
+import AbstinenceHabitDetails from '@/components/habit/abstinence-habit-details';
 import { Toaster } from '@/components/ui/sonner';
 import AppLayout from '@/layouts/app-layout';
-import { Habit, InspirationalQuote } from '@/types';
+import { Habit } from '@/types';
 
 interface Props {
     habit: Habit;
-    quote: InspirationalQuote;
 }
 
-export default function Show({ habit, quote }: Props) {
+export default function Show({ habit }: Props) {
     return (
         <AppLayout>
-            <CountHabitDetails habit={habit} quote={quote} />
+            {/*<CountHabitDetails habit={habit} />*/}
+            <AbstinenceHabitDetails habit={habit} />
             <Toaster />
         </AppLayout>
     );

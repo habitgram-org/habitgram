@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property int|null $goal
- * @property string|null $deleted_at
+ * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, CountHabitEntry> $entries
  * @property-read int|null $entries_count
  * @property-read Habit|null $habit
@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Database\Factories\Count\CountHabitFactory factory($count = null, $state = [])
  * @method static Builder<static>|CountHabit newModelQuery()
  * @method static Builder<static>|CountHabit newQuery()
+ * @method static Builder<static>|CountHabit onlyTrashed()
  * @method static Builder<static>|CountHabit query()
  * @method static Builder<static>|CountHabit whereCreatedAt($value)
  * @method static Builder<static>|CountHabit whereDeletedAt($value)
@@ -38,6 +39,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder<static>|CountHabit whereId($value)
  * @method static Builder<static>|CountHabit whereUnit($value)
  * @method static Builder<static>|CountHabit whereUpdatedAt($value)
+ * @method static Builder<static>|CountHabit withTrashed(bool $withTrashed = true)
+ * @method static Builder<static>|CountHabit withoutTrashed()
  *
  * @mixin \Eloquent
  */

@@ -5,25 +5,23 @@ declare(strict_types=1);
 namespace App\Http\Resources\AbstinenceHabit;
 
 use App\Models\Abstinence\AbstinenceHabitEntry;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Resource;
 
-/**
- * @property AbstinenceHabitEntry $resource
- */
-final class AbstinenceHabitEntryResource extends JsonResource
+final class AbstinenceHabitEntryResource extends Resource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    public function __construct(
+        public string $id,
+        public string $happened_at,
+        public Optional|string $created_at,
+    ) {}
+
+    public static function fromModel(AbstinenceHabitEntry $abstinenceHabitEntry): self
     {
-        return [
-            'id' => $this->resource->id,
-            'happened_at' => $this->resource->happened_at,
-            'created_at' => $this->whenNotNull($this->resource->created_at),
-        ];
+        return new self(
+            id: $abstinenceHabitEntry->id,
+            happened_at: $abstinenceHabitEntry->happened_at->toDayDateTimeString(),
+            created_at: $abstinenceHabitEntry->created_at?->toDayDateTimeString(),
+        );
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\HabitType;
+use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
 use App\Http\Resources\CountHabit\CountHabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
@@ -114,12 +115,17 @@ final class Habit extends Model
         return $this->belongsToMany(User::class, 'habit_participant')->using(HabitParticipant::class);
     }
 
-    public function getHabitableResource(): ?CountHabitResource
+    public function getHabitableResource(): CountHabitResource|AbstinenceHabitResource|null
     {
         if ($this->habitable::class === CountHabit::class) {
             assert($this->habitable instanceof CountHabit);
 
             return CountHabitResource::fromModel($this->habitable);
+        }
+        if ($this->habitable::class === AbstinenceHabit::class) {
+            assert($this->habitable instanceof AbstinenceHabit);
+
+            return AbstinenceHabitResource::fromModel($this->habitable);
         }
 
         return null;

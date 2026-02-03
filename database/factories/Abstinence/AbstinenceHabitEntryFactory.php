@@ -20,6 +20,7 @@ final class AbstinenceHabitEntryFactory extends Factory
     {
         return [
             'happened_at' => fake()->dateTimeBetween(now()->subYear()),
+            'reason' => fake()->realText(),
         ];
     }
 }
