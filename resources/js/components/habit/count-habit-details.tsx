@@ -1,3 +1,7 @@
+import DeleteHabitDialog from '@/components/habit/delete-habit-dialog';
+import HabitHeader from '@/components/habit/habit-header';
+import HabitNotesTab from '@/components/habit/habit-notes-tab';
+import HabitStatsCard, { StatIcons } from '@/components/habit/habit-stats-card';
 import InspirationalQuoteCard from '@/components/inspirational-quote-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,36 +12,15 @@ import {
     DialogDescription,
     DialogFooter,
     DialogHeader,
-    DialogTitle
+    DialogTitle,
 } from '@/components/ui/dialog';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Progress } from '@/components/ui/progress';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { CountHabit, Habit, SharedData } from '@/types';
 import { Form, useForm, usePage } from '@inertiajs/react';
-import {
-    Calendar,
-    FileText,
-    Flame,
-    Globe,
-    Lock,
-    MoreVertical,
-    Plus,
-    Target,
-    Trash2Icon,
-    TrendingUp,
-    Zap
-} from 'lucide-react';
+import { FileText, Plus, Target, TrendingUp, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -69,82 +52,19 @@ export default function CountHabitDetails({ habit }: Props) {
     return (
         <div className="min-h-screen bg-linear-to-b from-slate-50 to-white p-4 md:p-6 lg:p-8">
             <div className="mx-auto max-w-2xl space-y-6">
-                {/* Header */}
-                <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                        <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
-                            {habit.name}
-                        </h1>
-                        <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="gap-1">
-                                <Target className="size-3" />
-                                Count Habit
-                            </Badge>
-                            <Badge variant="outline" className="gap-1">
-                                {habit.is_public ? (
-                                    <Globe className="size-3" />
-                                ) : (
-                                    <Lock className="size-3" />
-                                )}
-                                {habit.is_public ? 'Public' : 'Private'}
-                            </Badge>
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <MoreVertical className="size-5" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem
-                                        variant="destructive"
-                                        onSelect={(e) => {
-                                            e.preventDefault();
-                                            setIsDeleteDialogOpen(true);
-                                        }}
-                                    >
-                                        <Trash2Icon className="mr-2 size-4" />
-                                        Delete
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                </div>
+                <HabitHeader
+                    title={habit.name}
+                    habitType="Count Habit"
+                    habitTypeIcon={<Target className="size-3" />}
+                    isPublic={habit.is_public}
+                    onDelete={() => setIsDeleteDialogOpen(true)}
+                />
 
-                <Dialog
+                <DeleteHabitDialog
                     open={isDeleteDialogOpen}
                     onOpenChange={setIsDeleteDialogOpen}
-                >
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Are you absolutely sure?</DialogTitle>
-                            <DialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete this habit.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter>
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => setIsDeleteDialogOpen(false)}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="button"
-                                onClick={handleDelete}
-                                variant="destructive"
-                            >
-                                Delete
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+                    onConfirm={handleDelete}
+                />
 
                 {/* Main Count Display */}
                 <Card className="border-emerald-100 bg-linear-to-br from-emerald-50 to-teal-50 p-8 md:p-12">
@@ -229,82 +149,37 @@ export default function CountHabitDetails({ habit }: Props) {
                     </TabsList>
 
                     <TabsContent value="overview" className="mt-6 space-y-6">
-                        {/* Progress & Stats */}
-                        <Card className="p-6">
-                            <div className="space-y-6">
-                                {/* Goal Progress */}
-                                {countHabit.goal && (
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm font-medium text-slate-700">
-                                                Goal Progress
-                                            </span>
-                                            <span className="text-sm font-semibold text-slate-900">
-                                                {countHabit.total} /{' '}
-                                                {countHabit.goal}{' '}
-                                                {countHabit.unit}
-                                            </span>
-                                        </div>
-                                        {countHabit.progress !== undefined && (
-                                            <Progress
-                                                value={countHabit.progress}
-                                                className="h-3"
-                                            />
-                                        )}
-                                        {countHabit.progress !== undefined && (
-                                            <p className="text-xs text-slate-500">
-                                                {countHabit.remaining_amount}{' '}
-                                                {countHabit.unit} to go •{' '}
-                                                {countHabit.progress}% complete
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-
-                                <Separator />
-
-                                {/* Stats Grid */}
-                                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                                    <div className="space-y-1 text-center">
-                                        <div className="flex items-center justify-center gap-2 text-slate-500">
-                                            <Flame className="size-4 text-orange-500" />
-                                            <span className="text-xs font-medium">
-                                                Streak
-                                            </span>
-                                        </div>
-                                        <p className="text-2xl font-bold text-slate-900">
-                                            {countHabit.streak_days} days
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-1 text-center">
-                                        <div className="flex items-center justify-center gap-2 text-slate-500">
-                                            <TrendingUp className="size-4 text-green-500" />
-                                            <span className="text-xs font-medium">
-                                                Avg/Day
-                                            </span>
-                                        </div>
-                                        <p className="text-2xl font-bold text-slate-900">
-                                            {countHabit.average_per_day}
-                                        </p>
-                                    </div>
-
-                                    <div className="col-span-2 space-y-1 text-center md:col-span-1">
-                                        <div className="flex items-center justify-center gap-2 text-slate-500">
-                                            <Calendar className="size-4 text-blue-500" />
-                                            <span className="text-xs font-medium">
-                                                Started
-                                            </span>
-                                        </div>
-                                        {habit.started_at && (
-                                            <p className="text-2xl font-bold text-slate-900">
-                                                {habit.started_at}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </Card>
+                        <HabitStatsCard
+                            goalProgress={
+                                countHabit.goal
+                                    ? {
+                                          current: countHabit.total,
+                                          goal: countHabit.goal,
+                                          unit: countHabit.unit,
+                                          percentage: countHabit.progress,
+                                          remaining:
+                                              countHabit.remaining_amount,
+                                      }
+                                    : undefined
+                            }
+                            stats={[
+                                {
+                                    icon: StatIcons.Streak,
+                                    label: 'Streak',
+                                    value: `${countHabit.streak_days} days`,
+                                },
+                                {
+                                    icon: StatIcons.Average,
+                                    label: 'Avg/Day',
+                                    value: countHabit.average_per_day,
+                                },
+                                {
+                                    icon: StatIcons.Calendar,
+                                    label: 'Started',
+                                    value: habit.started_at || '',
+                                },
+                            ]}
+                        />
 
                         <InspirationalQuoteCard quote={quote} />
 
@@ -343,43 +218,8 @@ export default function CountHabitDetails({ habit }: Props) {
                         </Card>
                     </TabsContent>
 
-                    <TabsContent value="notes" className="mt-6 space-y-4">
-                        {countHabit.notes_count === 0 ? (
-                            <Card className="p-12">
-                                <div className="space-y-3 text-center">
-                                    <FileText className="mx-auto size-12 text-slate-300" />
-                                    <div className="space-y-1">
-                                        <h3 className="text-lg font-semibold text-slate-900">
-                                            No notes yet
-                                        </h3>
-                                        <p className="text-sm text-slate-500">
-                                            Add notes when tracking your
-                                            progress to remember important
-                                            details
-                                        </p>
-                                    </div>
-                                </div>
-                            </Card>
-                        ) : (
-                            countHabit.notes.map((note, index) => (
-                                <Card key={index} className="p-6">
-                                    <div className="space-y-3">
-                                        <div className="flex items-start justify-between">
-                                            <div className="space-y-1">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs text-slate-500">
-                                                        {note.created_at}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p className="text-sm leading-relaxed text-slate-700">
-                                            {note.note}
-                                        </p>
-                                    </div>
-                                </Card>
-                            ))
-                        )}
+                    <TabsContent value="notes" className="mt-6">
+                        <HabitNotesTab notes={countHabit.notes} />
                     </TabsContent>
                 </Tabs>
             </div>
