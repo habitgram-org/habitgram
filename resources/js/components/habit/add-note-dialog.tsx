@@ -10,13 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Form } from '@inertiajs/react';
+import { toast } from 'sonner';
 
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    habitId: string;
 }
 
-export default function AddNoteDialog({open, onOpenChange}: Props) {
+export default function AddNoteDialog({open, onOpenChange, habitId}: Props) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -26,7 +28,16 @@ export default function AddNoteDialog({open, onOpenChange}: Props) {
                         Record your thoughts or feelings.
                     </DialogDescription>
                 </DialogHeader>
-                <Form method="POST" action={'#'} onSuccess={() => onOpenChange(false)}>
+                <Form
+                    method="POST"
+                    action={route('habits.notes.store', {
+                        habit: habitId,
+                    })}
+                    onSuccess={() => {
+                        onOpenChange(false);
+                        toast.success('Note added');
+                    }}
+                >
                     <div className="space-y-4 py-4">
                         <Label htmlFor="note">Note</Label>
                         <Textarea

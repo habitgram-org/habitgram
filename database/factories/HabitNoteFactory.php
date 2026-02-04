@@ -1,13 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Models\HabitParticipant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\HabitNote>
  */
-class HabitNoteFactory extends Factory
+final class HabitNoteFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,6 +21,7 @@ class HabitNoteFactory extends Factory
     {
         return [
             'note' => fake()->realText(),
+            'habit_participant_id' => HabitParticipant::factory(),
         ];
     }
 }

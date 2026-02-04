@@ -5,12 +5,17 @@ declare(strict_types=1);
 use App\Http\Controllers\Habit\Count\CountHabitController;
 use App\Http\Controllers\Habit\Count\CountHabitEntryController;
 use App\Http\Controllers\Habit\HabitController;
+use App\Http\Controllers\Habit\HabitNoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->as('habits.')->prefix('/habits')->group(function (): void {
     Route::get('', [HabitController::class, 'index'])->name('index');
     Route::get('{habit}', [HabitController::class, 'show'])->name('show');
     Route::delete('{habit}', [HabitController::class, 'destroy'])->name('destroy');
+
+    Route::as('notes.')->prefix('{habit}')->group(function (): void {
+        Route::post('notes', [HabitNoteController::class, 'store'])->name('store');
+    });
 
     /* Count Habit */
     Route::as('count.')->prefix('/count')->group(function (): void {

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Models\Abstinence;
 
 use App\Models\Habit;
+use App\Models\HabitNote;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 /**
@@ -18,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, AbstinenceHabitEntry> $entries
  * @property-read int|null $entries_count
  * @property-read Habit|null $habit
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitNote> $notes
+ * @property-read int|null $notes_count
  *
  * @method static \Database\Factories\Abstinence\AbstinenceHabitFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AbstinenceHabit newModelQuery()
@@ -48,5 +52,13 @@ final class AbstinenceHabit extends Model
     public function entries(): HasMany
     {
         return $this->hasMany(AbstinenceHabitEntry::class);
+    }
+
+    /**
+     * @return MorphMany<HabitNote, $this>
+     */
+    public function notes(): MorphMany
+    {
+        return $this->morphMany(HabitNote::class, 'habitable');
     }
 }

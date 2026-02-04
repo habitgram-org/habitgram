@@ -9,6 +9,7 @@ use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
 use App\Http\Resources\CountHabit\CountHabitResource;
 use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Habit;
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
@@ -29,13 +30,13 @@ final class HabitResource extends Resource
         public bool $is_public,
     ) {}
 
-    public static function fromModel(Habit $habit): self
+    public static function fromModel(Habit $habit, ?User $user = null): self
     {
         return new self(
             id: $habit->id,
             name: $habit->name,
             description: $habit->description ?? Optional::create(),
-            habitable: isset($habit->habitable) ? $habit->getHabitableResource() : Optional::create(),
+            habitable: isset($habit->habitable) ? $habit->getHabitableResource($user) : Optional::create(),
             type: isset($habit->habitable) ? $habit->getType() : Optional::create(),
             starts_at: $habit->starts_at ?? Optional::create(),
             ends_at: $habit->ends_at ?? Optional::create(),

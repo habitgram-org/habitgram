@@ -65,6 +65,8 @@ enum HabitType {
 
 export interface AbstinenceHabit {
     id: string;
+    notes: Array<EntryNote>;
+    notes_count: number;
     created_at?: string;
 }
 

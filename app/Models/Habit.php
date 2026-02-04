@@ -34,6 +34,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\CarbonImmutable|null $deleted_at
  * @property-read Model $habitable
  * @property-read User|null $leader
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitNote> $notes
+ * @property-read int|null $notes_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitParticipant> $participants
  * @property-read int|null $participants_count
  * @property-read HabitParticipant|null $pivot
@@ -115,7 +117,15 @@ final class Habit extends Model
         return $this->belongsToMany(User::class, 'habit_participant')->using(HabitParticipant::class);
     }
 
-    public function getHabitableResource(): CountHabitResource|AbstinenceHabitResource|null
+    /**
+     * @return HasMany<HabitNote, $this>
+     */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(HabitNote::class);
+    }
+
+    public function getHabitableResource(?User $user = null): CountHabitResource|AbstinenceHabitResource|null
     {
         if ($this->habitable::class === CountHabit::class) {
             assert($this->habitable instanceof CountHabit);
@@ -125,7 +135,7 @@ final class Habit extends Model
         if ($this->habitable::class === AbstinenceHabit::class) {
             assert($this->habitable instanceof AbstinenceHabit);
 
-            return AbstinenceHabitResource::fromModel($this->habitable);
+            return AbstinenceHabitResource::fromModel($this->habitable, $user);
         }
 
         return null;

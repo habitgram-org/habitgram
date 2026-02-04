@@ -41,7 +41,7 @@ final readonly class HabitController
             ], 'amount');
 
         return inertia('habits/show', [
-            'habit' => HabitResource::fromModel($habit),
+            'habit' => HabitResource::fromModel($habit, auth()->user()),
         ]);
     }
 

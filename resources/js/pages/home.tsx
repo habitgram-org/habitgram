@@ -1,4 +1,3 @@
-import CreateHabitDialog from '@/components/habit/CreateHabitDialog';
 import {
     Empty,
     EmptyContent,
@@ -21,9 +20,6 @@ export default function Home() {
                         </EmptyDescription>
                     </EmptyHeader>
                     <EmptyContent>
-                        <div className="flex gap-2">
-                            <CreateHabitDialog />
-                        </div>
                     </EmptyContent>
                 </Empty>{' '}
             </div>
