@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Habit\Abstinence\Note;
+namespace App\Actions\Habit\Note;
 
-use App\DTOs\Habit\Abstinence\Note\CreateHabitNoteDTO;
+use App\DTOs\Habit\Note\CreateHabitNoteDTO;
 use App\Models\Habit;
 use App\Models\HabitNote;
 use App\Models\User;

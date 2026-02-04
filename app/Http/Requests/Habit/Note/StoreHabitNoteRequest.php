@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests\Habit\Abstinence\Note;
+namespace App\Http\Requests\Habit\Note;
 
-use App\DTOs\Habit\Abstinence\Note\CreateHabitNoteDTO;
+use App\DTOs\Habit\Note\CreateHabitNoteDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 final class StoreHabitNoteRequest extends FormRequest

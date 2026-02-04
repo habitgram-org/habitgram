@@ -11,11 +11,15 @@ use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Habit;
 use App\Models\User;
 use Carbon\CarbonImmutable;
+use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
 
 final class HabitResource extends Resource
 {
+    /**
+     * @param  DataCollection<int, HabitNoteResource>  $notes
+     */
     public function __construct(
         public string $id,
         public string $name,
@@ -28,10 +32,17 @@ final class HabitResource extends Resource
         public Optional|CarbonImmutable $ended_at,
         public bool $has_started,
         public bool $is_public,
+        public DataCollection $notes,
+        public int $notes_count,
     ) {}
 
     public static function fromModel(Habit $habit, ?User $user = null): self
     {
+        $notes = HabitNoteResource::collect(
+            items: $habit->notes,
+            into: DataCollection::class,
+        );
+
         return new self(
             id: $habit->id,
             name: $habit->name,
@@ -45,6 +56,8 @@ final class HabitResource extends Resource
             has_started: (isset($habit->starts_at) && $habit->starts_at < now())
                 || (isset($habit->started_at)),
             is_public: $habit->is_public,
+            notes: $notes,
+            notes_count: $habit->notes_count,
         );
     }
 }

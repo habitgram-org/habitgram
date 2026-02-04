@@ -1,14 +1,14 @@
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
-    DialogTitle,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
+    DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Form } from '@inertiajs/react';
 import { toast } from 'sonner';
 
@@ -18,7 +18,7 @@ interface Props {
     habitId: string;
 }
 
-export default function AddNoteDialog({open, onOpenChange, habitId}: Props) {
+export default function AddNoteDialog({ open, onOpenChange, habitId }: Props) {
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -60,4 +60,4 @@ export default function AddNoteDialog({open, onOpenChange, habitId}: Props) {
             </DialogContent>
         </Dialog>
     );
-};
+}

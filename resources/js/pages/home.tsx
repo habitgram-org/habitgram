@@ -19,8 +19,7 @@ export default function Home() {
                             by creating your first habit.
                         </EmptyDescription>
                     </EmptyHeader>
-                    <EmptyContent>
-                    </EmptyContent>
+                    <EmptyContent></EmptyContent>
                 </Empty>{' '}
             </div>
         </AppLayout>

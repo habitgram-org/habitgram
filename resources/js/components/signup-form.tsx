@@ -45,10 +45,10 @@ export function SignupForm({ className, ...props }: ComponentProps<'div'>) {
                                         placeholder="@johndoe"
                                         required
                                     />
-                                    {errors['username'] && (
-                                        <ErrorField
-                                            message={errors['username']}
-                                        />
+                                    {errors.username && (
+                                        <ErrorField>
+                                            {errors.username}
+                                        </ErrorField>
                                     )}
                                 </Field>
                                 <Field>
@@ -62,8 +62,8 @@ export function SignupForm({ className, ...props }: ComponentProps<'div'>) {
                                         placeholder="john@example.com"
                                         required
                                     />
-                                    {errors['email'] && (
-                                        <ErrorField message={errors['email']} />
+                                    {errors.email && (
+                                        <ErrorField>{errors.email}</ErrorField>
                                     )}
                                 </Field>
                                 <Field>
@@ -78,10 +78,10 @@ export function SignupForm({ className, ...props }: ComponentProps<'div'>) {
                                                 type="password"
                                                 required
                                             />
-                                            {errors['password'] && (
-                                                <ErrorField
-                                                    message={errors['password']}
-                                                />
+                                            {errors.password && (
+                                                <ErrorField>
+                                                    {errors.password}
+                                                </ErrorField>
                                             )}
                                         </Field>
                                         <Field>
@@ -94,16 +94,12 @@ export function SignupForm({ className, ...props }: ComponentProps<'div'>) {
                                                 type="password"
                                                 required
                                             />
-                                            {errors[
-                                                'password_confirmation'
-                                            ] && (
-                                                <ErrorField
-                                                    message={
-                                                        errors[
-                                                            'password_confirmation'
-                                                        ]
+                                            {errors.password_confirmation && (
+                                                <ErrorField>
+                                                    {
+                                                        errors.password_confirmation
                                                     }
-                                                />
+                                                </ErrorField>
                                             )}
                                         </Field>
                                     </Field>

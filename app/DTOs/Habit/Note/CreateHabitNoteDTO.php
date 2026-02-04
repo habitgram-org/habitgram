@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\DTOs\Habit\Abstinence\Note;
+namespace App\DTOs\Habit\Note;
 
 use Spatie\LaravelData\Dto;
 

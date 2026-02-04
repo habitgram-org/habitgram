@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Abstinence\AbstinenceHabitRelapseController;
 use App\Http\Controllers\Habit\Count\CountHabitController;
 use App\Http\Controllers\Habit\Count\CountHabitEntryController;
 use App\Http\Controllers\Habit\HabitController;
@@ -26,6 +27,17 @@ Route::middleware(['auth', 'verified'])->as('habits.')->prefix('/habits')->group
         Route::as('entries.')->prefix('{countHabit}/entries')->group(function (): void {
             Route::post('', [CountHabitEntryController::class, 'store'])->name('store');
             Route::delete('{countHabitEntry}', [CountHabitEntryController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    Route::as('abstinence.')->prefix('/abstinence')->group(function (): void {
+        //        Route::post('', [AbstinenceHabitCo::class, 'store'])->name('store');
+        //        Route::patch('{countHabit}', [CountHabitController::class, 'update'])->name('update');
+
+        /* Abstinence Habit Relapse */
+        Route::as('relapses.')->prefix('{abstinenceHabit}/relapses')->group(function (): void {
+            Route::post('', [AbstinenceHabitRelapseController::class, 'store'])->name('store');
+            Route::delete('{abstinenceHabitRelapse}', [AbstinenceHabitRelapseController::class, 'destroy'])->name('destroy');
         });
     });
 });

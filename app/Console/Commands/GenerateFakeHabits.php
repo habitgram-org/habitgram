@@ -6,7 +6,7 @@ namespace App\Console\Commands;
 
 use App\Enums\HabitType;
 use App\Models\Abstinence\AbstinenceHabit;
-use App\Models\Abstinence\AbstinenceHabitEntry;
+use App\Models\Abstinence\AbstinenceHabitRelapse;
 use App\Models\Count\CountHabit;
 use App\Models\Count\CountHabitEntry;
 use App\Models\Daily\DailyHabit;
@@ -43,9 +43,9 @@ final class GenerateFakeHabits extends Command
             )
         };
 
-        /** @var class-string<AbstinenceHabitEntry|CountHabitEntry|DailyHabitEntry> $entryable */
+        /** @var class-string<AbstinenceHabitRelapse|CountHabitEntry|DailyHabitEntry> $entryable */
         $entryable = match ($type) {
-            HabitType::Abstinence->value => AbstinenceHabitEntry::class,
+            HabitType::Abstinence->value => AbstinenceHabitRelapse::class,
             HabitType::Count->value => CountHabitEntry::class,
             HabitType::Daily->value => DailyHabitEntry::class,
             default => throw new LogicException(

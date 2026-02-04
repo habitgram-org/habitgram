@@ -122,7 +122,7 @@ final class Habit extends Model
      */
     public function notes(): HasMany
     {
-        return $this->hasMany(HabitNote::class);
+        return $this->hasMany(HabitNote::class)->latest();
     }
 
     public function getHabitableResource(?User $user = null): CountHabitResource|AbstinenceHabitResource|null

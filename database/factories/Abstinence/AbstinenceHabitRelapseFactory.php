@@ -7,9 +7,9 @@ namespace Database\Factories\Abstinence;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Abstinence\AbstinenceHabitEntry>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Abstinence\AbstinenceHabitRelapse>
  */
-final class AbstinenceHabitEntryFactory extends Factory
+final class AbstinenceHabitRelapseFactory extends Factory
 {
     /**
      * Define the model's default state.

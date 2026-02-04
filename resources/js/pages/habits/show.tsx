@@ -10,8 +10,8 @@ interface Props {
 export default function Show({ habit }: Props) {
     return (
         <AppLayout>
-            {/*<CountHabitDetails habit={habit} />*/}
             <AbstinenceHabitDetails habit={habit} />
+
             <Toaster />
         </AppLayout>
     );

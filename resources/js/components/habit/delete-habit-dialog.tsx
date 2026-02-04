@@ -7,18 +7,26 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { useForm } from '@inertiajs/react';
 
 interface Props {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onConfirm: () => void;
+    action: string;
 }
 
 export default function DeleteHabitDialog({
     open,
     onOpenChange,
-    onConfirm,
+    action,
 }: Props) {
+    const { delete: destroy } = useForm();
+
+    function handleClick() {
+        onOpenChange(false);
+        destroy(action);
+    }
+
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
@@ -39,7 +47,7 @@ export default function DeleteHabitDialog({
                     </Button>
                     <Button
                         type="button"
-                        onClick={onConfirm}
+                        onClick={handleClick}
                         variant="destructive"
                     >
                         Delete

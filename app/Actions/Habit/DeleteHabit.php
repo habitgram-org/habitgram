@@ -20,6 +20,7 @@ final class DeleteHabit
     {
         DB::transaction(function () use ($habit): void {
             /** @var AbstinenceHabit|CountHabit|DailyHabit $habitable */
+            /** @phpstan-ignore-next-line */
             $habitable = $habit->habitable();
             $habitable->entries()->delete();
             $habitable->delete();

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\Abstinence\AbstinenceHabit;
+use App\Models\Count\CountHabit;
+use App\Models\Daily\DailyHabit;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -56,6 +59,11 @@ final class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
     /**
      * @return BelongsToMany<Habit, $this, HabitParticipant>
      */
@@ -65,16 +73,11 @@ final class User extends Authenticatable implements MustVerifyEmail
             ->using(HabitParticipant::class);
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function participantFor(AbstinenceHabit|CountHabit|DailyHabit $habitable): ?HabitParticipant
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $habitable->habit
+            ->participants()
+            ->where('user_id', $this->id)
+            ->first();
     }
 }

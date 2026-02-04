@@ -1,13 +1,14 @@
 import { FieldDescription } from '@/components/ui/field';
+import { ReactNode } from 'react';
 
 interface Props {
-    message: string;
+    children: ReactNode;
 }
 
-export default function ErrorField({ message }: Props) {
+export default function ErrorField({ children }: Props) {
     return (
         <FieldDescription className="text-xs text-red-500">
-            {message}
+            {children}
         </FieldDescription>
     );
 }

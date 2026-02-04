@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Habit;
 
 use App\Actions\Habit\DeleteHabit;
 use App\Http\Resources\HabitResource;
+use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
 use App\Models\Habit;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -35,10 +36,14 @@ final readonly class HabitController
     {
         $this->gate->authorize('view', $habit);
 
-        $habit->load(['habitable.entries', 'users'])
+        $habit->load(['habitable.entries', 'users', 'notes'])
             ->loadMorphSum('habitable', [
                 CountHabit::class => ['entries'],
-            ], 'amount');
+            ], 'amount')
+            ->loadMorphCount('habitable', [
+                AbstinenceHabit::class => ['relapses'],
+            ])
+            ->loadCount('notes');
 
         return inertia('habits/show', [
             'habit' => HabitResource::fromModel($habit, auth()->user()),

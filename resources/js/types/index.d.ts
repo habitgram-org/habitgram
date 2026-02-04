@@ -55,6 +55,8 @@ export interface Habit {
     ended_at?: string;
     has_started: boolean;
     is_public: boolean;
+    notes: Array<HabitNote>;
+    notes_count: number;
 }
 
 enum HabitType {
@@ -65,9 +67,20 @@ enum HabitType {
 
 export interface AbstinenceHabit {
     id: string;
-    notes: Array<EntryNote>;
-    notes_count: number;
+    relapses: Array<AbstinenceRelapse>;
+    relapses_count: number;
+    duration: number;
     created_at?: string;
+    max_streak_days: number;
+    max_streak_start: string;
+    max_streak_end: string;
+}
+
+export interface AbstinenceRelapse {
+    id: string;
+    happened_at: string;
+    reason: string;
+    streak_days: number;
 }
 
 export interface AbstinenceHabitEntry {
@@ -112,6 +125,12 @@ export interface DailyHabitEntry {
 }
 
 export interface EntryNote {
+    note: string;
+    created_at?: string;
+}
+
+export interface HabitNote {
+    id: string;
     note: string;
     created_at?: string;
 }
