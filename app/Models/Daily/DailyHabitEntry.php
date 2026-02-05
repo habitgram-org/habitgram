@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property string $id
- * @property string|null $failed_at
- * @property string|null $succeeded_at
+ * @property \Carbon\CarbonImmutable|null $failed_at
+ * @property \Carbon\CarbonImmutable|null $succeeded_at
  * @property string $daily_habit_id
  * @property string $habit_participant_id
  * @property \Carbon\CarbonImmutable|null $created_at
@@ -39,6 +39,11 @@ final class DailyHabitEntry extends Model
 {
     /** @use HasFactory<\Database\Factories\Daily\DailyHabitEntryFactory> */
     use HasFactory, HasUuids;
+
+    protected $casts = [
+        'succeeded_at' => 'immutable_datetime',
+        'failed_at' => 'immutable_datetime',
+    ];
 
     /**
      * @return BelongsTo<DailyHabit, $this>

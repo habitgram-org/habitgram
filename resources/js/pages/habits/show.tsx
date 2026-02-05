@@ -1,4 +1,4 @@
-import AbstinenceHabitDetails from '@/components/habit/abstinence-habit-details';
+import DailyHabitDetails from '@/components/habit/daily-habit-details';
 import { Toaster } from '@/components/ui/sonner';
 import AppLayout from '@/layouts/app-layout';
 import { Habit } from '@/types';
@@ -10,7 +10,7 @@ interface Props {
 export default function Show({ habit }: Props) {
     return (
         <AppLayout>
-            <AbstinenceHabitDetails habit={habit} />
+            <DailyHabitDetails habit={habit} />
 
             <Toaster />
         </AppLayout>

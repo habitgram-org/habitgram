@@ -28,7 +28,7 @@ final readonly class HabitController
             ->get();
 
         return inertia('habits/index', [
-            'habits' => HabitResource::collect($habits),
+            'habits' => [],
         ]);
     }
 

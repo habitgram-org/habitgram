@@ -21,7 +21,7 @@ final class DailyHabitEntryFactory extends Factory
         $isSucceeded = fake()->boolean();
 
         return [
-            'succeed_at' => $isSucceeded ? fake()->dateTimeBetween(now()->subYear()) : null,
+            'succeeded_at' => $isSucceeded ? fake()->dateTimeBetween(now()->subYear()) : null,
             'failed_at' => $isSucceeded ? null : fake()->dateTimeBetween(now()->subYear()),
         ];
     }

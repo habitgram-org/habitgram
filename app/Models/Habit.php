@@ -7,8 +7,10 @@ namespace App\Models;
 use App\Enums\HabitType;
 use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
 use App\Http\Resources\CountHabit\CountHabitResource;
+use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
+use App\Models\Daily\DailyHabit;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -125,7 +127,7 @@ final class Habit extends Model
         return $this->hasMany(HabitNote::class)->latest();
     }
 
-    public function getHabitableResource(): CountHabitResource|AbstinenceHabitResource|null
+    public function getHabitableResource(): CountHabitResource|AbstinenceHabitResource|DailyHabitResource|null
     {
         if ($this->habitable::class === CountHabit::class) {
             assert($this->habitable instanceof CountHabit);
@@ -136,6 +138,11 @@ final class Habit extends Model
             assert($this->habitable instanceof AbstinenceHabit);
 
             return AbstinenceHabitResource::fromModel($this->habitable);
+        }
+        if ($this->habitable::class === DailyHabit::class) {
+            assert($this->habitable instanceof DailyHabit);
+
+            return DailyHabitResource::fromModel($this->habitable);
         }
 
         return null;

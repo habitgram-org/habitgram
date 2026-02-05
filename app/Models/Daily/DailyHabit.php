@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Daily;
 
 use App\Models\Habit;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, DailyHabitEntry> $entries
  * @property-read int|null $entries_count
  * @property-read Habit|null $habit
+ * @property-read mixed $is_today_completed
  *
  * @method static \Database\Factories\Daily\DailyHabitFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|DailyHabit newModelQuery()
@@ -48,5 +50,18 @@ final class DailyHabit extends Model
     public function entries(): HasMany
     {
         return $this->hasMany(DailyHabitEntry::class);
+    }
+
+    /**
+     * @return Attribute<bool, void>
+     */
+    public function isTodayCompleted(): Attribute
+    {
+        /** @var DailyHabitEntry|null $latestLog */
+        $latestLog = $this->entries()->latest()->first();
+
+        return Attribute::make(
+            get: fn () => ! is_null($latestLog?->succeeded_at),
+        );
     }
 }

@@ -5,26 +5,25 @@ declare(strict_types=1);
 namespace App\Http\Resources\DailyHabit;
 
 use App\Models\Daily\DailyHabitEntry;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Spatie\LaravelData\Optional;
+use Spatie\LaravelData\Resource;
 
-/**
- * @property DailyHabitEntry $resource
- */
-final class DailyHabitEntryResource extends JsonResource
+final class DailyHabitEntryResource extends Resource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(Request $request): array
+    public function __construct(
+        public string $id,
+        public Optional|string $succeeded_at,
+        public Optional|string $failed_at,
+        public Optional|string $created_at,
+    ) {}
+
+    public static function fromModel(DailyHabitEntry $entry): self
     {
-        return [
-            'id' => $this->resource->id,
-            'failed_at' => $this->whenNotNull($this->resource->failed_at),
-            'succeeded_at' => $this->whenNotNull($this->resource->succeeded_at),
-            'created_at' => $this->resource->created_at,
-        ];
+        return new self(
+            id: $entry->id,
+            succeeded_at: $entry->succeeded_at?->toDayDateTimeString() ?? Optional::create(),
+            failed_at: $entry->failed_at?->toDayDateTimeString() ?? Optional::create(),
+            created_at: $entry->created_at?->toDayDateTimeString() ?? Optional::create(),
+        );
     }
 }

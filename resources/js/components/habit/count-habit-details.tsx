@@ -1,4 +1,3 @@
-import DeleteHabitDialog from '@/components/habit/delete-habit-dialog';
 import HabitHeader from '@/components/habit/habit-header';
 import HabitNotesTab from '@/components/habit/habit-notes-tab';
 import HabitStatsCard, { StatIcons } from '@/components/habit/habit-stats-card';
@@ -30,7 +29,6 @@ interface Props {
 
 export default function CountHabitDetails({ habit }: Props) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const { flash } = usePage();
     const { quote } = usePage<SharedData>().props;
     const countHabit = habit.habitable as CountHabit;
@@ -48,16 +46,10 @@ export default function CountHabitDetails({ habit }: Props) {
             <div className="mx-auto max-w-2xl space-y-6">
                 <HabitHeader
                     title={habit.name}
+                    habitId={habit.id}
                     habitType="Count Habit"
                     habitTypeIcon={<Target className="size-3" />}
                     isPublic={habit.is_public}
-                    onDelete={() => setIsDeleteDialogOpen(true)}
-                />
-
-                <DeleteHabitDialog
-                    open={isDeleteDialogOpen}
-                    onOpenChange={setIsDeleteDialogOpen}
-                    action={route('habits.destroy', { habit: habit.id })}
                 />
 
                 {/* Main Count Display */}

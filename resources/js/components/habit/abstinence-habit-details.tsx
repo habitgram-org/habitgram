@@ -1,6 +1,5 @@
 import AddNoteDialog from '@/components/habit/add-note-dialog';
 import AddRelapseDialog from '@/components/habit/add-relapse-dialog';
-import DeleteHabitDialog from '@/components/habit/delete-habit-dialog';
 import HabitHeader from '@/components/habit/habit-header';
 import HabitNotesTab from '@/components/habit/habit-notes-tab';
 import { Button } from '@/components/ui/button';
@@ -30,7 +29,6 @@ type TimeViewMode = 'detailed' | 'days' | 'hours' | 'minutes' | 'seconds';
 export default function AbstinenceHabitDetails({ habit }: Props) {
     const abstinenceHabit = habit.habitable as AbstinenceHabit;
     const initialDuration = abstinenceHabit.duration;
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
     const [timeViewMode, setTimeViewMode] = useState<TimeViewMode>('detailed');
     const [isRelapseDialogOpen, setIsRelapseDialogOpen] = useState(false);
@@ -193,15 +191,10 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
             <div className="mx-auto max-w-2xl space-y-6">
                 <HabitHeader
                     title={habit.name}
+                    habitId={habit.id}
                     habitType="Abstinence Habit"
                     habitTypeIcon={<ShieldCheckIcon className="size-3" />}
                     isPublic={habit.is_public}
-                    onDelete={() => setIsDeleteDialogOpen(true)}
-                />
-                <DeleteHabitDialog
-                    open={isDeleteDialogOpen}
-                    onOpenChange={setIsDeleteDialogOpen}
-                    action={route('habits.destroy', { habit: habit.id })}
                 />
 
                 {/*Main Timer Display*/}
