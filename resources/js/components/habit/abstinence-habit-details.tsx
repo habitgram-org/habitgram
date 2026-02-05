@@ -18,12 +18,13 @@ import {
     Trophy,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { NumericFormat } from 'react-number-format';
 
 interface Props {
     habit: Habit;
 }
 
-type TimeViewMode = 'detailed' | 'days' | 'hours' | 'seconds';
+type TimeViewMode = 'detailed' | 'days' | 'hours' | 'minutes' | 'seconds';
 
 export default function AbstinenceHabitDetails({ habit }: Props) {
     const abstinenceHabit = habit.habitable as AbstinenceHabit;
@@ -66,7 +67,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
     }
 
     function toggleTimeView() {
-        const modes: TimeViewMode[] = ['detailed', 'seconds', 'hours', 'days'];
+        const modes: TimeViewMode[] = ['detailed', 'seconds', 'minutes', 'hours', 'days'];
         const currentIndex = modes.indexOf(timeViewMode);
         const nextIndex = (currentIndex + 1) % modes.length;
         setTimeViewMode(modes[nextIndex]);
@@ -78,10 +79,33 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                 return (
                     <div className="flex animate-in flex-col items-center duration-300 fade-in zoom-in">
                         <span className="text-5xl font-bold text-emerald-600 tabular-nums md:text-7xl lg:text-8xl">
-                            {Math.trunc(currentDuration / 1000)}
+                            <NumericFormat
+                                disabled={true}
+                                className="text-center"
+                                value={Math.trunc(currentDuration / 1000)}
+                                thousandSeparator={' '}
+                            />
                         </span>
                         <span className="mt-2 text-sm font-medium text-slate-500 md:text-base">
                             TOTAL SECONDS
+                        </span>
+                    </div>
+                );
+            case 'minutes':
+                return (
+                    <div className="flex animate-in flex-col items-center duration-300 fade-in zoom-in">
+                        <span className="text-5xl font-bold text-emerald-600 tabular-nums md:text-7xl lg:text-8xl">
+                            <NumericFormat
+                                disabled={true}
+                                className="text-center"
+                                value={Math.trunc(
+                                    currentDuration / (1000 * 60),
+                                )}
+                                thousandSeparator={' '}
+                            />
+                        </span>
+                        <span className="mt-2 text-sm font-medium text-slate-500 md:text-base">
+                            TOTAL MINUTES
                         </span>
                     </div>
                 );
@@ -89,7 +113,12 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                 return (
                     <div className="flex animate-in flex-col items-center duration-300 fade-in zoom-in">
                         <span className="text-5xl font-bold text-emerald-600 tabular-nums md:text-7xl lg:text-8xl">
-                            {Math.trunc(currentDuration / (1000 * 60 * 60))}
+                            <NumericFormat
+                                disabled={true}
+                                className="text-center"
+                                value={Math.trunc(currentDuration / (1000 * 60 * 60))}
+                                thousandSeparator={' '}
+                            />
                         </span>
                         <span className="mt-2 text-sm font-medium text-slate-500 md:text-base">
                             TOTAL HOURS
@@ -173,16 +202,16 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                     </div>
 
                     {/* View Toggle Hint */}
-                    <div className="absolute top-4 right-4 flex cursor-pointer items-center gap-1 text-xs font-medium text-slate-400 opacity-0 transition-opacity group-hover:opacity-100">
+                    <div
+                        onClick={ toggleTimeView }
+                        className="absolute top-4 right-4 flex cursor-pointer items-center gap-1 text-xs font-medium text-slate-400 opacity-0 transition-opacity group-hover:opacity-100"
+                    >
                         <MousePointerClick className="size-3" />
                         Click to cycle view
                     </div>
 
                     <div className="relative z-10 space-y-8 text-center">
-                        <div
-                            className="cursor-pointer space-y-2 select-none"
-                            onClick={toggleTimeView}
-                        >
+                        <div className="cursor-pointer space-y-2 select-none">
                             <p className="text-sm font-medium tracking-widest text-slate-500 uppercase">
                                 {timeViewMode === 'detailed'
                                     ? 'Clean Time'
