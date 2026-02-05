@@ -34,6 +34,7 @@ enum UnitType: int
     case Glasses = 15; // water
 
     // Time-based
+    case Seconds = 21;
     case Minutes = 16;
     case Hours = 17;
 
@@ -41,4 +42,14 @@ enum UnitType: int
     case Tasks = 18;
     case Words = 19;
     case Lines = 20; // code
+
+    /**
+     * @return UnitType[]
+     */
+    public static function time(): array
+    {
+        return [
+            self::Seconds, self::Minutes, self::Hours,
+        ];
+    }
 }

@@ -74,6 +74,11 @@ export interface AbstinenceHabit {
     max_streak_days: number;
     max_streak_start: string;
     max_streak_end: string;
+    goal?: string;
+    goal_current?: string;
+    goal_remaining?: string;
+    goal_unit?: string;
+    goal_progress?: number;
 }
 
 export interface AbstinenceRelapse {

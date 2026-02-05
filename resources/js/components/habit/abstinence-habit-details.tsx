@@ -5,6 +5,7 @@ import HabitHeader from '@/components/habit/habit-header';
 import HabitNotesTab from '@/components/habit/habit-notes-tab';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AbstinenceHabit, Habit } from '@/types';
 import {
@@ -67,7 +68,13 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
     }
 
     function toggleTimeView() {
-        const modes: TimeViewMode[] = ['detailed', 'seconds', 'minutes', 'hours', 'days'];
+        const modes: TimeViewMode[] = [
+            'detailed',
+            'seconds',
+            'minutes',
+            'hours',
+            'days',
+        ];
         const currentIndex = modes.indexOf(timeViewMode);
         const nextIndex = (currentIndex + 1) % modes.length;
         setTimeViewMode(modes[nextIndex]);
@@ -116,7 +123,9 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                             <NumericFormat
                                 disabled={true}
                                 className="text-center"
-                                value={Math.trunc(currentDuration / (1000 * 60 * 60))}
+                                value={Math.trunc(
+                                    currentDuration / (1000 * 60 * 60),
+                                )}
                                 thousandSeparator={' '}
                             />
                         </span>
@@ -203,7 +212,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
 
                     {/* View Toggle Hint */}
                     <div
-                        onClick={ toggleTimeView }
+                        onClick={toggleTimeView}
                         className="absolute top-4 right-4 flex cursor-pointer items-center gap-1 text-xs font-medium text-slate-400 opacity-0 transition-opacity group-hover:opacity-100"
                     >
                         <MousePointerClick className="size-3" />
@@ -260,7 +269,38 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="overview" className="mt-6">
+                    <TabsContent value="overview" className="mt-6 space-y-6">
+                        {abstinenceHabit.goal && (
+                            <Card className="space-y-3 p-6">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium text-slate-700">
+                                        Goal Progress
+                                    </span>
+                                    <span className="text-sm font-semibold text-slate-900">
+                                        {abstinenceHabit.goal_current} /{' '}
+                                        {abstinenceHabit.goal}{' '}
+                                        {abstinenceHabit.goal_unit}
+                                    </span>
+                                </div>
+                                {abstinenceHabit.goal_progress !==
+                                    undefined && (
+                                    <Progress
+                                        value={abstinenceHabit.goal_progress}
+                                        className="h-3"
+                                    />
+                                )}
+                                {abstinenceHabit.goal_progress !== undefined &&
+                                    abstinenceHabit.goal_remaining !==
+                                        undefined && (
+                                        <p className="text-xs text-slate-500">
+                                            {abstinenceHabit.goal_remaining}{' '}
+                                            {abstinenceHabit.goal_unit} to go •{' '}
+                                            {abstinenceHabit.goal_progress}%
+                                            complete
+                                        </p>
+                                    )}
+                            </Card>
+                        )}
                         {/* Stats Grid */}
                         <div className="grid grid-cols-1 gap-4">
                             <Card className="flex flex-col items-center justify-center space-y-2 p-6 text-center">

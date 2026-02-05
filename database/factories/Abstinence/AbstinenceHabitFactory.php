@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories\Abstinence;
 
+use App\Enums\UnitType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,11 @@ final class AbstinenceHabitFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        $hasGoal = fake()->boolean();
+
+        return [
+            'goal' => $hasGoal ? fake()->numberBetween(10_000, 100_000) : null,
+            'goal_unit' => $hasGoal ? fake()->randomElement(UnitType::time()) : null,
+        ];
     }
 }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\AbstinenceHabit;
 
-use App\Http\Resources\EntryNoteResource;
 use App\Models\Abstinence\AbstinenceHabit;
-use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Number;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Optional;
 use Spatie\LaravelData\Resource;
@@ -26,36 +25,19 @@ final class AbstinenceHabitResource extends Resource
         public string $max_streak_start,
         public string $max_streak_end,
         public int $duration,
+        public Optional|string $goal,
+        public Optional|string $goal_current,
+        public Optional|int $goal_progress,
+        public Optional|string $goal_remaining,
+        public Optional|string $goal_unit,
     ) {}
 
-    public static function fromModel(AbstinenceHabit $abstinenceHabit, ?User $user = null): self
+    public static function fromModel(AbstinenceHabit $abstinenceHabit): self
     {
         $relapses = AbstinenceHabitEntryResource::collect(
             items: $abstinenceHabit->relapses,
             into: DataCollection::class,
         );
-
-        //        if ($user instanceof User) {
-        //            $participantId = $abstinenceHabit->habit
-        //                ?->participants()
-        //                ->where('user_id', $user->id)
-        //                ->value('id');
-        //
-        //            if ($participantId) {
-        //                $notes = EntryNoteResource::collect(
-        //                    items: $abstinenceHabit->notes()
-        //                        ->where('habit_participant_id', $participantId)
-        //                        ->latest()
-        //                        ->limit(5)
-        //                        ->get(),
-        //                    into: DataCollection::class,
-        //                );
-        //
-        //                $notesCount = $abstinenceHabit->notes()
-        //                    ->where('habit_participant_id', $participantId)
-        //                    ->count();
-        //            }
-        //        }
 
         return new self(
             id: $abstinenceHabit->id,
@@ -66,6 +48,11 @@ final class AbstinenceHabitResource extends Resource
             max_streak_start: CarbonImmutable::createFromDate(2022, 6, 12)->toDateString(),
             max_streak_end: CarbonImmutable::createFromDate(2022, 11, 17)->toDateString(),
             duration: $abstinenceHabit->duration,
+            goal: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->goal, locale: 'sv') : Optional::create(),
+            goal_current: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->goalCurrent, locale: 'sv') : Optional::create(),
+            goal_progress: $abstinenceHabit->progress ?? Optional::create(),
+            goal_remaining: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->remaining, locale: 'sv') : Optional::create(),
+            goal_unit: lcfirst((string) $abstinenceHabit->goal_unit?->name) ?? Optional::create(),
         );
     }
 }

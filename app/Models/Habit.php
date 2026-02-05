@@ -125,7 +125,7 @@ final class Habit extends Model
         return $this->hasMany(HabitNote::class)->latest();
     }
 
-    public function getHabitableResource(?User $user = null): CountHabitResource|AbstinenceHabitResource|null
+    public function getHabitableResource(): CountHabitResource|AbstinenceHabitResource|null
     {
         if ($this->habitable::class === CountHabit::class) {
             assert($this->habitable instanceof CountHabit);
@@ -135,7 +135,7 @@ final class Habit extends Model
         if ($this->habitable::class === AbstinenceHabit::class) {
             assert($this->habitable instanceof AbstinenceHabit);
 
-            return AbstinenceHabitResource::fromModel($this->habitable, $user);
+            return AbstinenceHabitResource::fromModel($this->habitable);
         }
 
         return null;

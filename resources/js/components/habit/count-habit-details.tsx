@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { CountHabit, Habit, SharedData } from '@/types';
-import { Form, useForm, usePage } from '@inertiajs/react';
+import { Form, usePage } from '@inertiajs/react';
 import { FileText, Plus, Target, TrendingUp, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -29,17 +29,11 @@ interface Props {
 }
 
 export default function CountHabitDetails({ habit }: Props) {
-    const { delete: destroy } = useForm();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const { flash } = usePage();
     const { quote } = usePage<SharedData>().props;
     const countHabit = habit.habitable as CountHabit;
-
-    function handleDelete() {
-        setIsDeleteDialogOpen(false);
-        destroy(route('habits.destroy', { habit: habit.id }));
-    }
 
     useEffect(() => {
         if (flash?.newly_added_amount) {
@@ -63,7 +57,7 @@ export default function CountHabitDetails({ habit }: Props) {
                 <DeleteHabitDialog
                     open={isDeleteDialogOpen}
                     onOpenChange={setIsDeleteDialogOpen}
-                    onConfirm={handleDelete}
+                    action={route('habits.destroy', { habit: habit.id })}
                 />
 
                 {/* Main Count Display */}

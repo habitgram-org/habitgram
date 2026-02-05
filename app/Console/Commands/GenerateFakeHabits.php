@@ -53,7 +53,7 @@ final class GenerateFakeHabits extends Command
             )
         };
 
-        $user = User::factory();
+        $user = User::find('019bd6f0-4da1-71b0-90dc-ea3981846764');
         $habit = Habit::factory()
             ->for($habitable::factory(), 'habitable')
             ->create();

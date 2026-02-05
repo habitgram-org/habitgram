@@ -46,7 +46,7 @@ final readonly class HabitController
             ->loadCount('notes');
 
         return inertia('habits/show', [
-            'habit' => HabitResource::fromModel($habit, auth()->user()),
+            'habit' => HabitResource::fromModel($habit),
         ]);
     }
 
