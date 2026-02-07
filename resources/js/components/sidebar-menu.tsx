@@ -1,24 +1,43 @@
 import { cn } from '@/lib/utils';
 import { SharedData } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
+import { clsx } from 'clsx';
 import { Heart, Home, Menu, User } from 'lucide-react';
-import { ElementType, useState } from 'react';
-import { Button } from './ui/button';
+import { ElementType } from 'react';
+import { Button, buttonVariants } from './ui/button';
 
 interface NavItem {
     icon: ElementType;
     label: string;
-    isActive?: boolean;
+    url: string;
+    isActive: boolean;
 }
 
 export default function SidebarMenu() {
-    const [activeTab, setActiveTab] = useState('Home');
-    const { auth } = usePage<SharedData>().props;
+    const { auth, currentRoute } = usePage<SharedData>().props;
+    const homeRoute = route('habits.index');
+    const activityRoute = route('activity');
+    const profileRoute = route('profile', { username: auth.user.username });
 
     const navItems: NavItem[] = [
-        { icon: Home, label: 'Home', isActive: true },
-        { icon: Heart, label: 'Activity' },
-        { icon: User, label: 'Profile' },
+        {
+            icon: Home,
+            label: 'Home',
+            url: homeRoute,
+            isActive: homeRoute === currentRoute,
+        },
+        {
+            icon: Heart,
+            label: 'Activity',
+            url: activityRoute,
+            isActive: activityRoute === currentRoute,
+        },
+        {
+            icon: User,
+            label: 'Profile',
+            url: profileRoute,
+            isActive: profileRoute === currentRoute,
+        },
     ];
 
     return (
@@ -33,24 +52,29 @@ export default function SidebarMenu() {
 
                 <nav className="flex-1 space-y-2 px-4">
                     {navItems.map((item) => (
-                        <Button
+                        <Link
                             key={item.label}
-                            variant={
-                                activeTab === item.label ? 'secondary' : 'ghost'
-                            }
+                            href={item.url}
                             className={cn(
-                                'h-12 w-full justify-start gap-3 text-base font-medium',
-                                activeTab === item.label
-                                    ? 'bg-slate-100 font-semibold'
-                                    : 'text-slate-600 hover:text-slate-900',
+                                buttonVariants({
+                                    variant: item.isActive
+                                        ? 'secondary'
+                                        : 'ghost',
+                                    size: 'default',
+                                    className: clsx(
+                                        'h-12 w-full justify-start gap-3 text-base font-medium',
+                                        item.isActive
+                                            ? 'bg-slate-100 font-semibold'
+                                            : 'text-slate-600 hover:text-slate-900',
+                                    ),
+                                }),
                             )}
-                            onClick={() => setActiveTab(item.label)}
                         >
                             {item.label === 'Profile' ? (
                                 <div
                                     className={cn(
                                         'size-6 shrink-0 overflow-hidden rounded-full border border-slate-200',
-                                        activeTab === item.label
+                                        item.isActive
                                             ? 'ring-2 ring-slate-900 ring-offset-2'
                                             : '',
                                     )}
@@ -65,14 +89,14 @@ export default function SidebarMenu() {
                                 <item.icon
                                     className={cn(
                                         'size-6',
-                                        activeTab === item.label
+                                        item.isActive
                                             ? 'text-slate-900'
                                             : 'text-slate-500',
                                     )}
                                 />
                             )}
                             {item.label}
-                        </Button>
+                        </Link>
                     ))}
                 </nav>
 
@@ -90,23 +114,26 @@ export default function SidebarMenu() {
             {/* Mobile Bottom Nav */}
             <div className="pb-safe fixed right-0 bottom-0 left-0 z-50 flex items-center justify-between border-t bg-white px-4 py-2 md:hidden">
                 {navItems.map((item) => (
-                    <Button
+                    <Link
                         key={item.label}
-                        variant="ghost"
-                        size="icon"
                         className={cn(
-                            'flex h-auto flex-col items-center justify-center gap-1 py-1',
-                            activeTab === item.label
-                                ? 'text-slate-900'
-                                : 'text-slate-500',
+                            buttonVariants({
+                                variant: 'ghost',
+                                size: 'icon',
+                                className: clsx(
+                                    'flex h-auto flex-col items-center justify-center gap-1 py-1',
+                                    item.isActive
+                                        ? 'text-slate-900'
+                                        : 'text-slate-500',
+                                ),
+                            }),
                         )}
-                        onClick={() => setActiveTab(item.label)}
                     >
                         {item.label === 'Profile' ? (
                             <div
                                 className={cn(
                                     'size-6 shrink-0 overflow-hidden rounded-full border border-slate-200',
-                                    activeTab === item.label
+                                    item.isActive
                                         ? 'ring-2 ring-slate-900 ring-offset-2'
                                         : '',
                                 )}
@@ -121,12 +148,12 @@ export default function SidebarMenu() {
                             <item.icon
                                 className={cn(
                                     'size-6',
-                                    activeTab === item.label && 'fill-current',
+                                    item.isActive && 'fill-current',
                                 )}
                             />
                         )}
                         <span className="sr-only">{item.label}</span>
-                    </Button>
+                    </Link>
                 ))}
             </div>
         </>

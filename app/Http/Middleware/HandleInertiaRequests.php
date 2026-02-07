@@ -49,6 +49,7 @@ final class HandleInertiaRequests extends Middleware
                 'user' => UserResource::fromModel($request->user()),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'currentRoute' => url()->current(),
         ];
     }
 
