@@ -34,9 +34,8 @@ export interface User {
     id: string;
     username: string;
     email: string;
-    avatar?: string;
+    avatar: string; // Base64 string
     email_verified_at: string | null;
-    two_factor_enabled?: boolean;
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

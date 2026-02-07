@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c46bd92c4276c23ceb9ef46a25eab92b",
+    "content-hash": "76d5bc8ca7ed9a76c1260c1907fe28cd",
     "packages": [
         {
             "name": "brick/math",
@@ -6542,6 +6542,135 @@
             "time": "2025-12-02T11:56:42+00:00"
         },
         {
+            "name": "tomloprod/colority",
+            "version": "v1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomloprod/colority.git",
+                "reference": "ba032cec150fcd139808431c5a47c8dec6e83782"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomloprod/colority/zipball/ba032cec150fcd139808431c5a47c8dec6e83782",
+                "reference": "ba032cec150fcd139808431c5a47c8dec6e83782",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^8.2.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.22.1",
+                "pestphp/pest": "^3.8.2",
+                "pestphp/pest-plugin-type-coverage": "^3.5.0",
+                "rector/rector": "^1.0.4"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Support/ColorityAlias.php"
+                ],
+                "psr-4": {
+                    "Tomloprod\\Colority\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomás López",
+                    "email": "tomloprod@gmail.com"
+                }
+            ],
+            "description": "Colority is a lightweight PHP library designed to handle color transformations, validations and manipulations with ease.",
+            "keywords": [
+                "colors",
+                "conversion-utiliy",
+                "utility",
+                "wcag-contrast"
+            ],
+            "support": {
+                "issues": "https://github.com/tomloprod/colority/issues",
+                "source": "https://github.com/tomloprod/colority/tree/v1.7.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.com/paypalme/tomloprod",
+                    "type": "custom"
+                }
+            ],
+            "time": "2026-01-11T09:27:19+00:00"
+        },
+        {
+            "name": "tomloprod/radiance",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomloprod/radiance.git",
+                "reference": "8784e3ba7b52b807ee7d3199921eeb4915f929cf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomloprod/radiance/zipball/8784e3ba7b52b807ee7d3199921eeb4915f929cf",
+                "reference": "8784e3ba7b52b807ee7d3199921eeb4915f929cf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^8.2.0",
+                "tomloprod/colority": "^1.7.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.22.1",
+                "pestphp/pest": "^3.8.2",
+                "pestphp/pest-plugin-type-coverage": "^3.5.0",
+                "phpstan/phpstan": "^2.0.3",
+                "rector/rector": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Support/RadianceAlias.php"
+                ],
+                "psr-4": {
+                    "Tomloprod\\Radiance\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomás López",
+                    "email": "tomloprod@gmail.com"
+                }
+            ],
+            "description": "A deterministic mesh gradient avatar generator for PHP.",
+            "keywords": [
+                "avatar",
+                "deterministic",
+                "generator",
+                "identicon",
+                "mesh-gradient",
+                "php",
+                "svg"
+            ],
+            "support": {
+                "issues": "https://github.com/tomloprod/radiance/issues",
+                "source": "https://github.com/tomloprod/radiance/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.paypal.com/paypalme/tomloprod",
+                    "type": "custom"
+                }
+            ],
+            "time": "2026-01-11T17:05:41+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.6.3",
             "source": {
@@ -10307,7 +10436,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.2"
+        "php": "^8.4"
     },
     "platform-dev": {},
     "plugin-api-version": "2.9.0"

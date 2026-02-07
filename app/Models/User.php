@@ -8,6 +8,7 @@ use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
 use App\Models\Daily\DailyHabit;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,6 +24,7 @@ use Illuminate\Notifications\Notifiable;
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property string $username
+ * @property-read mixed $avatar
  * @property-read HabitParticipant|null $pivot
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Habit> $habits
  * @property-read int|null $habits_count
@@ -79,5 +81,21 @@ final class User extends Authenticatable implements MustVerifyEmail
             ->participants()
             ->where('user_id', $this->id)
             ->first();
+    }
+
+    /**
+     * @return Attribute<string, void>
+     */
+    public function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => radiance()
+                ->seed($this->username)
+                ->text(mb_strtoupper(mb_substr($this->username, 0, 2)))
+                ->textShadow(2)
+                ->circle()
+                ->enablePixelPattern(false)
+                ->toBase64()
+        );
     }
 }
