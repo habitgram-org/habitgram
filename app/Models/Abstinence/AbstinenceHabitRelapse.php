@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $habit_participant_id
  * @property \Carbon\CarbonImmutable|null $created_at
  * @property \Carbon\CarbonImmutable|null $updated_at
- * @property string|null $reason
+ * @property string $reason
  * @property-read AbstinenceHabit $abstinenceHabit
  *
  * @method static \Database\Factories\Abstinence\AbstinenceHabitRelapseFactory factory($count = null, $state = [])
@@ -38,15 +38,19 @@ final class AbstinenceHabitRelapse extends Model
     /** @use HasFactory<\Database\Factories\Abstinence\AbstinenceHabitRelapseFactory> */
     use HasFactory, HasUuids;
 
-    protected $casts = [
-        'happened_at' => 'immutable_datetime',
-    ];
-
     /**
      * @return BelongsTo<AbstinenceHabit, $this>
      */
     public function abstinenceHabit(): BelongsTo
     {
         return $this->belongsTo(AbstinenceHabit::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'reason' => app()->environment('production') ? 'encrypted' : 'string',
+            'happened_at' => 'immutable_datetime',
+        ];
     }
 }

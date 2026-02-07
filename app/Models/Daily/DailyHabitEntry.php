@@ -40,16 +40,20 @@ final class DailyHabitEntry extends Model
     /** @use HasFactory<\Database\Factories\Daily\DailyHabitEntryFactory> */
     use HasFactory, HasUuids;
 
-    protected $casts = [
-        'succeeded_at' => 'immutable_datetime',
-        'failed_at' => 'immutable_datetime',
-    ];
-
     /**
      * @return BelongsTo<DailyHabit, $this>
      */
     public function dailyHabit(): BelongsTo
     {
         return $this->belongsTo(DailyHabit::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'note' => app()->environment('production') ? 'encrypted' : 'string',
+            'succeeded_at' => 'immutable_datetime',
+            'failed_at' => 'immutable_datetime',
+        ];
     }
 }

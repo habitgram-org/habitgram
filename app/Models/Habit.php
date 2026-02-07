@@ -72,15 +72,6 @@ final class Habit extends Model
     /** @use HasFactory<\Database\Factories\HabitFactory> */
     use HasFactory, HasUuids, SoftDeletes;
 
-    protected $casts = [
-        'started_at' => 'immutable_datetime',
-        'ended_at' => 'immutable_datetime',
-        'starts_at' => 'immutable_datetime',
-        'ends_at' => 'immutable_datetime',
-        'deleted_at' => 'immutable_datetime',
-        'is_public' => 'boolean',
-    ];
-
     /**
      * @return MorphTo<Model, $this>
      */
@@ -155,5 +146,18 @@ final class Habit extends Model
             CountHabit::class => HabitType::Count,
             default => HabitType::Daily,
         };
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'name' => app()->environment('production') ? 'encrypted' : 'string',
+            'started_at' => 'immutable_datetime',
+            'ended_at' => 'immutable_datetime',
+            'starts_at' => 'immutable_datetime',
+            'ends_at' => 'immutable_datetime',
+            'deleted_at' => 'immutable_datetime',
+            'is_public' => 'boolean',
+        ];
     }
 }

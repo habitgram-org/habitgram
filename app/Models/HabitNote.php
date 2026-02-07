@@ -52,4 +52,11 @@ final class HabitNote extends Model
     {
         return $this->belongsTo(HabitParticipant::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'note' => app()->environment('production') ? 'encrypted' : 'string',
+        ];
+    }
 }

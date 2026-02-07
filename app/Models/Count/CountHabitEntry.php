@@ -70,4 +70,11 @@ final class CountHabitEntry extends Model
             secondLocalKey: 'user_id',
         );
     }
+
+    protected function casts(): array
+    {
+        return [
+            'note' => app()->environment('production') ? 'encrypted' : 'string',
+        ];
+    }
 }
