@@ -26,9 +26,9 @@ final class UserResource extends Resource
             avatar: $user->avatar,
             username: $user->username,
             email: $user->email,
-            email_verified_at: $user->email_verified_at,
-            created_at: $user->created_at,
-            updated_at: $user->updated_at,
+            email_verified_at: $user->email_verified_at?->toDayDateTimeString(),
+            created_at: $user->created_at->toDayDateTimeString(),
+            updated_at: $user->updated_at->toDayDateTimeString(),
         );
     }
 }

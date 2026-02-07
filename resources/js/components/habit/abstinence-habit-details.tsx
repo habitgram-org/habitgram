@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AbstinenceHabit, Habit } from '@/types';
+import { AbstinenceHabit, Habit, SharedData } from '@/types';
 import {
     Clock,
     FileText,
@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { NumericFormat } from 'react-number-format';
+import InspirationalQuoteCard from '@/components/inspirational-quote-card';
+import { usePage } from '@inertiajs/react';
 
 interface Props {
     habit: Habit;
@@ -27,6 +29,7 @@ interface Props {
 type TimeViewMode = 'detailed' | 'days' | 'hours' | 'minutes' | 'seconds';
 
 export default function AbstinenceHabitDetails({ habit }: Props) {
+    const {quote} = usePage<SharedData>().props
     const abstinenceHabit = habit.habitable as AbstinenceHabit;
     const initialDuration = abstinenceHabit.duration;
     const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
@@ -367,6 +370,8 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </Card>
                     </TabsContent>
                 </Tabs>
+
+                <InspirationalQuoteCard quote={quote}/>
 
                 <AddRelapseDialog
                     open={isRelapseDialogOpen}
