@@ -8,9 +8,12 @@ use App\Actions\Habit\DeleteHabit;
 use App\Http\Resources\HabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
+use App\Models\Daily\DailyHabit;
 use App\Models\Habit;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Throwable;
 
@@ -32,11 +35,17 @@ final readonly class HabitController
         ]);
     }
 
-    public function show(Habit $habit): Response
+    public function show(Habit $habit, Request $request): Response
     {
         $this->gate->authorize('view', $habit);
 
-        $habit->load(['habitable.entries', 'users', 'notes'])
+        $habit->load(['habitable.entries' => function (HasMany $query) use ($request): void {
+            if ($query->getParent() instanceof DailyHabit) {
+                $query->whereRaw('EXTRACT(YEAR FROM created_at) = ?', [
+                    $request->get('year') ?? now()->year,
+                ])->latest();
+            }
+        }, 'users', 'notes'])
             ->loadMorphSum('habitable', [
                 CountHabit::class => ['entries'],
             ], 'amount')

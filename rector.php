@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 
 return RectorConfig::configure()
     ->withPaths([
@@ -16,6 +17,7 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         __DIR__.'/bootstrap/cache',
+        ClosureToArrowFunctionRector::class,
     ])
     ->withPhpSets(php84: true)
     ->withTypeCoverageLevel(0)

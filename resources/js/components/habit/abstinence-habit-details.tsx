@@ -151,7 +151,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                     <div className="mx-auto grid max-w-lg animate-in grid-cols-4 gap-2 duration-300 fade-in zoom-in md:gap-4">
                         <div className="flex flex-col items-center">
                             <span className="text-4xl font-bold text-emerald-600 tabular-nums md:text-5xl lg:text-6xl">
-                                {time.days}
+                                {time.days.toString().padStart(2, '0')}
                             </span>
                             <span className="text-xs font-medium text-slate-500 md:text-sm">
                                 DAYS
@@ -159,7 +159,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </div>
                         <div className="flex flex-col items-center">
                             <span className="text-4xl font-bold text-slate-700 tabular-nums md:text-5xl lg:text-6xl">
-                                {time.hours}
+                                {time.hours.toString().padStart(2, '0')}
                             </span>
                             <span className="text-xs font-medium text-slate-500 md:text-sm">
                                 HRS
@@ -167,7 +167,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </div>
                         <div className="flex flex-col items-center">
                             <span className="text-4xl font-bold text-slate-700 tabular-nums md:text-5xl lg:text-6xl">
-                                {time.minutes}
+                                {time.minutes.toString().padStart(2, '0')}
                             </span>
                             <span className="text-xs font-medium text-slate-500 md:text-sm">
                                 MINS
@@ -175,7 +175,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </div>
                         <div className="flex flex-col items-center">
                             <span className="text-4xl font-bold text-slate-400 tabular-nums md:text-5xl lg:text-6xl">
-                                {time.seconds}
+                                {time.seconds.toString().padStart(2, '0')}
                             </span>
                             <span className="text-xs font-medium text-slate-500 md:text-sm">
                                 SECS
@@ -213,7 +213,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                     </div>
 
                     <div className="relative z-10 space-y-8 text-center">
-                        <div className="cursor-pointer space-y-2 select-none">
+                        <div className="space-y-2 select-none">
                             <p className="text-sm font-medium tracking-widest text-slate-500 uppercase">
                                 {timeViewMode === 'detailed'
                                     ? 'Clean Time'

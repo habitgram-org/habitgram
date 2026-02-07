@@ -17,14 +17,14 @@ final class CountHabitResource extends Resource
     /**
      * @param  DataCollection<int, CountHabitEntryResource>  $entries
      * @param  DataCollection<int, EntryNoteResource>  $notes
-     * @param  Collection<int>  $quick_amounts
+     * @param  Collection<int, int>  $quick_amounts
      */
     public function __construct(
         public string $id,
         public string $total,
         public string $unit,
         public DataCollection $entries,
-        /** @var Collection<int> */
+        /** @var Collection<int, int> */
         public Collection $quick_amounts,
         public DataCollection $notes,
         public int $notes_count,

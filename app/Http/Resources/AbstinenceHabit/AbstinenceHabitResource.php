@@ -49,10 +49,10 @@ final class AbstinenceHabitResource extends Resource
             max_streak_end: CarbonImmutable::createFromDate(2022, 11, 17)->toDateString(),
             duration: $abstinenceHabit->duration,
             goal: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->goal, locale: 'sv') : Optional::create(),
-            goal_current: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->goalCurrent, locale: 'sv') : Optional::create(),
+            goal_current: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->goal_current, locale: 'sv') : Optional::create(),
             goal_progress: $abstinenceHabit->progress ?? Optional::create(),
             goal_remaining: isset($abstinenceHabit->goal) ? Number::format($abstinenceHabit->remaining, locale: 'sv') : Optional::create(),
-            goal_unit: lcfirst((string) $abstinenceHabit->goal_unit?->name) ?? Optional::create(),
+            goal_unit: isset($abstinenceHabit->goal) ? lcfirst($abstinenceHabit->goal_unit->name) : Optional::create(),
         );
     }
 }

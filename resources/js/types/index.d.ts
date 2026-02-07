@@ -120,6 +120,7 @@ export interface CountHabitEntry {
 
 export interface DailyHabit {
     id: string;
+    entries: Array<DailyHabitEntry>;
     longest_streak_days: number;
     current_streak_days: number;
     total_completions: number;
@@ -134,7 +135,10 @@ export interface DailyHabit {
 }
 
 export interface DailyHabitEntry {
-    id: string;
+    date: string;
+    id?: string;
+    is_succeeded?: boolean;
+    is_future: boolean;
     note?: string;
     created_at?: string;
 }

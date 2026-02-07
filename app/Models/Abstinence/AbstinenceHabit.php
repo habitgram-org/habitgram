@@ -144,7 +144,7 @@ final class AbstinenceHabit extends Model
     public function progress(): Attribute
     {
         return Attribute::make(
-            get: fn () => ! is_null($this->goal) ? (int) ($this->duration / $this->goalMilliseconds * 100) : null,
+            get: fn () => ! is_null($this->goal) ? (int) ($this->duration / $this->goal_milliseconds * 100) : null,
         );
     }
 
@@ -154,12 +154,12 @@ final class AbstinenceHabit extends Model
     public function remaining(): Attribute
     {
         return Attribute::make(
-            get: fn () => (int) match ($this->goal_unit) {
-                UnitType::Seconds => ($this->goalMilliseconds - $this->duration) / 1000,
-                UnitType::Minutes => ($this->goalMilliseconds - $this->duration) / (1000 * 60),
-                UnitType::Hours => ($this->goalMilliseconds - $this->duration) / (1000 * 60 * 60),
+            get: fn () => (int) ceil(match ($this->goal_unit) {
+                UnitType::Seconds => ($this->goal_milliseconds - $this->duration) / 1000,
+                UnitType::Minutes => ($this->goal_milliseconds - $this->duration) / (1000 * 60),
+                UnitType::Hours => ($this->goal_milliseconds - $this->duration) / (1000 * 60 * 60),
                 default => throw new LogicException('Goal unit type should either: Seconds, Minutes or Hours.'),
-            },
+            }),
         );
     }
 }

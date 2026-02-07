@@ -1,9 +1,15 @@
 import HabitHeader from '@/components/habit/habit-header';
+import HabitNotesTab from '@/components/habit/habit-notes-tab';
 import LogActivityDialog from '@/components/habit/log-activity-dialog';
 import InspirationalQuoteCard from '@/components/inspirational-quote-card';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { DailyHabit, Habit, SharedData } from '@/types';
 import { usePage } from '@inertiajs/react';
@@ -24,87 +30,35 @@ interface Props {
     habit: Habit;
 }
 
+enum DayStatus {
+    Completed = 'completed',
+    Missed = 'missed',
+    None = 'none',
+}
+
 export default function DailyHabitDetails({ habit }: Props) {
     const { quote } = usePage<SharedData>().props;
     const dailyHabit = habit.habitable as DailyHabit;
 
     const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
 
-    // Mock State for Completion
-    // const [completions, setCompletions] = useState<Record<string, DayStatus>>(
-    //     () => {
-    //         const data: Record<string, DayStatus> = {};
-    //         const start = startOfYear(new Date(year, 0, 1));
-    //         const end = endOfYear(new Date(year, 0, 1));
-    //         let current = start;
-    //         while (current <= end) {
-    //             if (current.getMonth() < 2) {
-    //                 const rand = Math.random();
-    //                 const dateKey = format(current, 'yyyy-MM-dd');
-    //                 if (rand > 0.3) data[dateKey] = 'completed';
-    //                 else if (rand > 0.1) data[dateKey] = 'missed';
-    //             }
-    //             current = addDays(current, 1);
-    //         }
-    //         return data;
-    //     },
-    // );
+    const getStatusColor = (isFuture: boolean, status?: DayStatus) => {
+        if (isFuture) {
+            return 'bg-slate-100';
+        }
+        if (status === DayStatus.Completed) {
+            return 'bg-emerald-500 hover:bg-emerald-600';
+        }
+        if (status === DayStatus.Missed) {
+            return 'bg-red-500 hover:bg-red-600';
+        }
 
-    // Helper to generate calendar grid
-    // const daysInYear = eachDayOfInterval({
-    //     start: startOfYear(new Date(year, 0, 1)),
-    //     end: endOfYear(new Date(year, 0, 1)),
-    // });
+        return 'bg-slate-100 hover:bg-slate-200'; // DayStatus.None
+    };
 
-    // Align to Monday start
-    // const startDate = startOfYear(new Date(year, 0, 1));
-    // const startDayOfWeek = getDay(startDate);
-    // const offset = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
-    // const placeholders = Array(offset).fill(null);
-
-    // const openLogDialog = (date: Date) => {
-    //     const key = format(date, 'yyyy-MM-dd');
-    //     const currentStatus = completions[key] || 'none';
-    //
-    //     setSelectedDate(date);
-    //     setLogStatus(currentStatus);
-    //     setLogNote(''); // Reset note
-    //     setIsLogDialogOpen(true);
-    // };
-
-    // const handleSaveLog = () => {
-    // const key = format(selectedDate, 'yyyy-MM-dd');
-    //
-    // // Update completion status
-    // setCompletions((prev) => ({
-    //     ...prev,
-    //     [key]: logStatus,
-    // }));
-
-    // Add note if present
-    // if (logNote.trim()) {
-    //     const newNote: NoteEntry = {
-    //         id: Date.now().toString(),
-    //         note: logNote.trim(),
-    //         timestamp: new Date(), // Or use selectedDate if we want to backdate notes, but timestamp usually implies creation time
-    //     };
-    //     setNotes((prev) => [newNote, ...prev]);
-    // }
-
-    // setIsLogDialogOpen(false);
-    // toast.success(`Logged activity for ${format(selectedDate, 'MMM d')}`);
-    // };
-
-    // const getStatusColor = (status?: DayStatus, isFuture?: boolean) => {
-    //     if (isFuture) return 'bg-slate-100';
-    //     if (status === 'completed')
-    //         return 'bg-emerald-500 hover:bg-emerald-600';
-    //     if (status === 'missed') return 'bg-red-500 hover:bg-red-600';
-    //     return 'bg-slate-100 hover:bg-slate-200'; // None/Empty
-    // };
-
-    // const todayKey = format(new Date(), 'yyyy-MM-dd');
-    // const isTodayComplete = completions[todayKey] === 'completed';
+    const startDate = new Date(dailyHabit.year, 0, 1);
+    const offset = startDate.getDay() === 0 ? 6 : startDate.getDay() - 1;
+    const placeholders = Array(offset).fill(null);
 
     return (
         <div className="min-h-screen bg-slate-50/50 p-4 md:p-6 lg:p-8">
@@ -181,45 +135,40 @@ export default function DailyHabitDetails({ habit }: Props) {
                                 </div>
 
                                 <div className="grid h-[116px] grid-flow-col grid-rows-7 gap-1">
-                                    {/*{placeholders.map((_, i) => (*/}
-                                    {/*    <div*/}
-                                    {/*        key={`placeholder-${i}`}*/}
-                                    {/*        className="size-3.5 bg-transparent"*/}
-                                    {/*    />*/}
-                                    {/*))}*/}
-                                    {/*{daysInYear.map((day) => {*/}
-                                    {/*    const dateKey = format(*/}
-                                    {/*        day,*/}
-                                    {/*        'yyyy-MM-dd',*/}
-                                    {/*    );*/}
-                                    {/*    const status = completions[dateKey];*/}
-                                    {/*    // Very simple "future" check*/}
-                                    {/*    const isFuture =*/}
-                                    {/*        isAfter(day, new Date()) &&*/}
-                                    {/*        year >= new Date().getFullYear();*/}
-
-                                    {/*    return (*/}
-                                    {/*        <div*/}
-                                    {/*            key={dateKey}*/}
-                                    {/*            onClick={() =>*/}
-                                    {/*                !isFuture &&*/}
-                                    {/*                openLogDialog(day)*/}
-                                    {/*            }*/}
-                                    {/*            className={cn(*/}
-                                    {/*                'size-3.5 cursor-pointer rounded-sm transition-colors',*/}
-                                    {/*                getStatusColor(*/}
-                                    {/*                    status,*/}
-                                    {/*                    isFuture,*/}
-                                    {/*                ),*/}
-                                    {/*            )}*/}
-                                    {/*            title={`${format(day, 'MMM d, yyyy')}: ${status || 'none'}`}*/}
-                                    {/*        />*/}
-                                    {/*    );*/}
-                                    {/*})}*/}
+                                    {placeholders.map((_, i) => (
+                                        <div
+                                            key={`placeholder-${i}`}
+                                            className="size-3.5 bg-transparent"
+                                        />
+                                    ))}
+                                    {dailyHabit.entries.map((day) => {
+                                        return (
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <div
+                                                        key={day.date}
+                                                        className={cn(
+                                                            'size-3.5 cursor-pointer rounded-sm transition-colors',
+                                                            getStatusColor(
+                                                                day.is_future,
+                                                                day.is_succeeded &&
+                                                                    day.is_succeeded
+                                                                    ? DayStatus.Completed
+                                                                    : DayStatus.Missed,
+                                                            ),
+                                                        )}
+                                                    />
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {day.date}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </div>
-                        Legend
+
                         <div className="mt-6 flex items-center gap-4 pl-8 text-xs text-slate-500">
                             <span>Legend:</span>
                             <div className="flex items-center gap-1.5">
@@ -340,9 +289,7 @@ export default function DailyHabitDetails({ habit }: Props) {
                     </TabsContent>
 
                     <TabsContent value="notes" className="mt-6">
-                        <Card className="p-8 text-center text-slate-500">
-                            <p>Full notes history view (Placeholder)</p>
-                        </Card>
+                        <HabitNotesTab notes={habit.notes} />
                     </TabsContent>
                 </Tabs>
 
