@@ -10,6 +10,8 @@ require __DIR__.'/habits.php';
 
 Route::get('/', [MainController::class, 'index'])->name('index');
 
+Route::inertia('/activity', 'activity')->name('activity');
+
 Route::controller(ProfileController::class)->group(function (): void {
     Route::get('{username}', 'show')->name('profile');
 });

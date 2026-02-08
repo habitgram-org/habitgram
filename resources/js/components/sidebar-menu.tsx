@@ -15,7 +15,7 @@ interface NavItem {
 
 export default function SidebarMenu() {
     const { auth, currentRoute } = usePage<SharedData>().props;
-    const homeRoute = route('habits.index');
+    const homeRoute = route('index');
     const activityRoute = route('activity');
     const profileRoute = route('profile', { username: auth.user.username });
 

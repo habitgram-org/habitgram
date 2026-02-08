@@ -31,7 +31,7 @@ export function SignupForm({ className, ...props }: ComponentProps<'div'>) {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Form action={route('auth.signup.store')} method="post">
+                    <Form action={route('signup.store')} method="post">
                         {({ errors }) => (
                             <FieldGroup>
                                 <Field>

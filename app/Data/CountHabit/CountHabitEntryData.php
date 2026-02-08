@@ -2,18 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\CountHabit;
+namespace App\Data\CountHabit;
 
 use App\Models\Count\CountHabitEntry;
-use Spatie\LaravelData\Optional;
-use Spatie\LaravelData\Resource;
+use Spatie\LaravelData\Data;
 
-final class CountHabitEntryResource extends Resource
+final class CountHabitEntryData extends Data
 {
     public function __construct(
         public string $id,
         public int $amount,
-        public Optional|string $created_at,
+        public ?string $created_at,
     ) {}
 
     public static function fromModel(CountHabitEntry $countHabitEntry): self

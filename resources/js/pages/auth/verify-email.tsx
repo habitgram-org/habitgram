@@ -28,7 +28,7 @@ export default function VerifyEmail() {
 
                 <Button variant="link" className="mt-4 block">
                     <Link
-                        href={route('auth.logout')}
+                        href={route('logout')}
                         method="post"
                         as="button"
                         className="underline"

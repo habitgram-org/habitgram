@@ -27,6 +27,7 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    currentRoute: string;
     [key: string]: unknown;
 }
 
@@ -41,21 +42,49 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
+export interface PaginatedResponse<T> {
+    data: Array<T>;
+    links: Array<PaginationLink>;
+    meta: Meta;
+}
+
+interface PaginationLink {
+    url: string | null;
+    label: string;
+    page: number | null;
+    active: boolean;
+}
+
+interface Meta {
+    current_page: number;
+    first_page_url: string;
+    from: number;
+    to: number;
+    total: number;
+    last_page: number;
+    last_page_url: string;
+    next_page_url: string;
+    path: strin;
+    per_page: number;
+    prev_page_url: string | null;
+}
+
 export interface Habit {
     id: string;
     name: string;
     type: HabitType;
-    habitable: AbstinenceHabit | CountHabit | DailyHabit;
-    description?: string;
-    created_at?: string;
-    starts_at?: string;
-    ends_at?: string;
-    started_at?: string;
-    ended_at?: string;
-    has_started: boolean;
-    is_public: boolean;
-    notes: Array<HabitNote>;
-    notes_count: number;
+    image?: string;
+    habitable?: AbstinenceHabit | CountHabit | DailyHabit | null;
+    description?: string | null;
+    created_at?: string | null;
+    starts_at?: string | null;
+    ends_at?: string | null;
+    started_at?: string | null;
+    ended_at?: string | null;
+    has_started?: boolean;
+    is_public?: boolean;
+    notes?: Array<HabitNote>;
+    notes_count?: number;
 }
 
 enum HabitType {

@@ -13,7 +13,7 @@ use App\Http\Controllers\Habit\HabitNoteController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->as('habits.')->prefix('/habits')->group(function (): void {
-    Route::get('', [HabitController::class, 'index'])->name('index');
+    Route::get('create', [HabitController::class, 'create'])->name('create');
     Route::get('{habit}', [HabitController::class, 'show'])->name('show');
     Route::delete('{habit}', [HabitController::class, 'destroy'])->name('destroy');
 

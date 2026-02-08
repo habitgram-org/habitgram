@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Http\Resources\UserResource;
+use App\Data\UserData;
 use App\Services\InspiringService;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -46,7 +46,7 @@ final class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => UserResource::fromModel($request->user()),
+                'user' => ! is_null($request->user()) ? UserData::from($request->user()) : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'currentRoute' => url()->current(),

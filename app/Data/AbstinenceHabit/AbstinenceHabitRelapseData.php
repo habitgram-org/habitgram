@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\AbstinenceHabit;
+namespace App\Data\AbstinenceHabit;
 
 use App\Models\Abstinence\AbstinenceHabitRelapse;
-use Spatie\LaravelData\Optional;
-use Spatie\LaravelData\Resource;
+use Spatie\LaravelData\Data;
 
-final class AbstinenceHabitEntryResource extends Resource
+final class AbstinenceHabitRelapseData extends Data
 {
     public function __construct(
         public string $id,
         public string $happened_at,
         public string $reason,
         public int $streak_days,
-        public Optional|string $created_at,
+        public ?string $created_at,
     ) {}
 
     public static function fromModel(AbstinenceHabitRelapse $abstinenceHabitEntry): self

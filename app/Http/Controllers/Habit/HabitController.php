@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Habit;
 
 use App\Actions\Habit\DeleteHabit;
-use App\Http\Resources\HabitResource;
+use App\Data\HabitData;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
 use App\Models\Daily\DailyHabit;
@@ -21,18 +21,9 @@ final readonly class HabitController
 {
     public function __construct(private Gate $gate) {}
 
-    public function index(): Response
+    public function create(): Response
     {
-        $this->gate->authorize('viewAny', Habit::class);
-
-        $habits = auth()->user()
-            ->habits()
-            ->select(['habits.id', 'habits.name', 'habits.description'])
-            ->get();
-
-        return inertia('habits/index', [
-            'habits' => [],
-        ]);
+        return inertia('habits/create');
     }
 
     public function show(Habit $habit, Request $request): Response
@@ -55,7 +46,8 @@ final readonly class HabitController
             ->loadCount('notes');
 
         return inertia('habits/show', [
-            'habit' => HabitResource::fromModel($habit),
+            'habit' => HabitData::from($habit)
+                ->include('habitable'),
         ]);
     }
 
@@ -68,6 +60,6 @@ final readonly class HabitController
 
         $deleteHabit->run($habit);
 
-        return to_route('habits.index');
+        return to_route('index');
     }
 }

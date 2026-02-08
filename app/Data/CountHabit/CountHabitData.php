@@ -2,38 +2,35 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Resources\CountHabit;
+namespace App\Data\CountHabit;
 
-use App\Http\Resources\EntryNoteResource;
+use App\Data\EntryNoteData;
 use App\Models\Count\CountHabit;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
-use Spatie\LaravelData\DataCollection;
-use Spatie\LaravelData\Optional;
-use Spatie\LaravelData\Resource;
+use Spatie\LaravelData\Data;
 
-final class CountHabitResource extends Resource
+final class CountHabitData extends Data
 {
     /**
-     * @param  DataCollection<int, CountHabitEntryResource>  $entries
-     * @param  DataCollection<int, EntryNoteResource>  $notes
+     * @param  Collection<int, CountHabitEntryData>  $entries
+     * @param  Collection<int, EntryNoteData>  $notes
      * @param  Collection<int, int>  $quick_amounts
      */
     public function __construct(
         public string $id,
         public string $total,
         public string $unit,
-        public DataCollection $entries,
-        /** @var Collection<int, int> */
+        public Collection $entries,
         public Collection $quick_amounts,
-        public DataCollection $notes,
+        public Collection $notes,
         public int $notes_count,
         public int $streak_days,
         public int $average_per_day,
-        public Optional|string $goal,
-        public Optional|int $progress,
-        public Optional|int $remaining_amount,
-        public Optional|string $created_at,
+        public ?string $goal,
+        public ?int $progress,
+        public ?int $remaining_amount,
+        public ?string $created_at,
     ) {}
 
     public static function fromModel(CountHabit $countHabit): self
@@ -54,21 +51,19 @@ final class CountHabitResource extends Resource
             id: $countHabit->id,
             total: Number::format($countHabit->getAttribute('entries_sum_amount'), locale: 'sv'),
             unit: $countHabit->unit->name,
-            entries: CountHabitEntryResource::collect(
+            entries: CountHabitEntryData::collect(
                 items: $countHabit->entries()->latest()->limit(5)->get(),
-                into: DataCollection::class,
             ),
             quick_amounts: $quickAmounts,
-            notes: EntryNoteResource::collect(
+            notes: EntryNoteData::collect(
                 items: $countHabit->entries()->whereNotNull('note')->latest()->limit(5)->get(),
-                into: DataCollection::class,
             ),
             notes_count: $countHabit->entries->filter(fn ($entry) => ! empty($entry->note))->count(),
             streak_days: 0, // TODO: Calculate streak days
             average_per_day: $averagePerDay,
-            goal: isset($countHabit->goal) ? Number::format($countHabit->goal, locale: 'sv') : Optional::create(),
-            progress: $countHabit->progress ?? Optional::create(),
-            remaining_amount: $countHabit->remaining_amount ?? Optional::create(),
+            goal: isset($countHabit->goal) ? Number::format($countHabit->goal, locale: 'sv') : null,
+            progress: $countHabit->progress,
+            remaining_amount: $countHabit->remaining_amount,
             created_at: $countHabit->created_at?->toDayDateTimeString(),
         );
     }

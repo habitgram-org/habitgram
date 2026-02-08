@@ -8,13 +8,12 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::as('auth.')->group(function (): void {
-    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::permanentRedirect('/login', '/');
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    Route::get('/signup', [RegisteredUserController::class, 'create'])->name('signup.create');
-    Route::post('/signup', [RegisteredUserController::class, 'store'])->name('signup.store');
-});
+Route::get('/signup', [RegisteredUserController::class, 'create'])->name('signup.create');
+Route::post('/signup', [RegisteredUserController::class, 'store'])->name('signup.store');
 
 Route::get('/email/verify', fn () => inertia('auth/verify-email'))->middleware('auth')->name('verification.notice');
 

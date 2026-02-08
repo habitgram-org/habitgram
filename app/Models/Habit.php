@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Data\AbstinenceHabit\AbstinenceHabitData;
+use App\Data\CountHabit\CountHabitData;
+use App\Data\DailyHabit\DailyHabitData;
 use App\Enums\HabitType;
-use App\Http\Resources\AbstinenceHabit\AbstinenceHabitResource;
-use App\Http\Resources\CountHabit\CountHabitResource;
-use App\Http\Resources\DailyHabit\DailyHabitResource;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
 use App\Models\Daily\DailyHabit;
@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use LogicException;
 
 /**
  * @property string $id
@@ -118,22 +119,22 @@ final class Habit extends Model
         return $this->hasMany(HabitNote::class)->latest();
     }
 
-    public function getHabitableResource(): CountHabitResource|AbstinenceHabitResource|DailyHabitResource|null
+    public function getHabitableResource(): null|AbstinenceHabitData|CountHabitData|DailyHabitData
     {
         if ($this->habitable::class === CountHabit::class) {
             assert($this->habitable instanceof CountHabit);
 
-            return CountHabitResource::fromModel($this->habitable);
+            return CountHabitData::from($this->habitable);
         }
         if ($this->habitable::class === AbstinenceHabit::class) {
             assert($this->habitable instanceof AbstinenceHabit);
 
-            return AbstinenceHabitResource::fromModel($this->habitable);
+            return AbstinenceHabitData::from($this->habitable);
         }
         if ($this->habitable::class === DailyHabit::class) {
             assert($this->habitable instanceof DailyHabit);
 
-            return DailyHabitResource::fromModel($this->habitable);
+            return DailyHabitData::from($this->habitable);
         }
 
         return null;
@@ -141,10 +142,11 @@ final class Habit extends Model
 
     public function getType(): HabitType
     {
-        return match ($this->habitable::class) {
-            AbstinenceHabit::class => HabitType::Abstinence,
-            CountHabit::class => HabitType::Count,
-            default => HabitType::Daily,
+        return match (true) {
+            $this->habitable instanceof AbstinenceHabit => HabitType::Abstinence,
+            $this->habitable instanceof CountHabit => HabitType::Count,
+            $this->habitable instanceof DailyHabit => HabitType::Daily,
+            default => throw new LogicException('Unknown habitable type: '.$this->habitable),
         };
     }
 

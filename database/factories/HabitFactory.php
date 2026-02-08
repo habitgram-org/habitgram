@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\HabitColor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ final class HabitFactory extends Factory
             'started_at' => fake()->dateTimeBetween(now()->subYear()),
             'ended_at' => null,
             'is_public' => fake()->boolean(),
+            'color' => fake()->randomElement(HabitColor::class),
         ];
     }
 }

@@ -19,7 +19,7 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
                     <CardTitle className="text-xl">Welcome back</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Form action={route('auth.login')} method="post">
+                    <Form action={route('login')} method="post">
                         {({ errors }) => (
                             <FieldGroup>
                                 <Field>
@@ -67,7 +67,7 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
                                     <Button type="submit">Login</Button>
                                     <FieldDescription className="text-center">
                                         Don&apos;t have an account?{' '}
-                                        <a href={route('auth.signup.create')}>
+                                        <a href={route('signup.create')}>
                                             Sign up
                                         </a>
                                     </FieldDescription>

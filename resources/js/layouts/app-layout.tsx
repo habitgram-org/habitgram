@@ -6,7 +6,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SidebarMenu />
 
             {/* Main Content Area */}
-            <main className="min-h-screen flex-1 pb-16 md:ml-64 md:pb-0">
+            <main className="min-h-screen flex-1 p-4 pb-16 md:ml-64 md:p-6 md:pb-0 lg:p-8">
                 {children}
             </main>
         </div>
