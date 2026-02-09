@@ -47,7 +47,7 @@ final readonly class HabitController
 
         return inertia('habits/show', [
             'habit' => HabitData::from($habit)
-                ->include('habitable'),
+                ->include('notes', 'notes_count', 'habitable.*'),
         ]);
     }
 

@@ -320,7 +320,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                     </TabsContent>
 
                     <TabsContent value="notes" className="mt-6">
-                        <HabitNotesTab notes={habit.notes} />
+                        <HabitNotesTab notes={habit.notes ?? []} />
                     </TabsContent>
 
                     <TabsContent value="history" className="mt-6">

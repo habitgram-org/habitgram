@@ -9,6 +9,7 @@ use App\Models\Count\CountHabit;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Lazy;
 
 final class CountHabitData extends Data
 {
@@ -19,18 +20,18 @@ final class CountHabitData extends Data
      */
     public function __construct(
         public string $id,
-        public string $total,
-        public string $unit,
-        public Collection $entries,
-        public Collection $quick_amounts,
-        public Collection $notes,
-        public int $notes_count,
-        public int $streak_days,
-        public int $average_per_day,
-        public ?string $goal,
-        public ?int $progress,
-        public ?int $remaining_amount,
-        public ?string $created_at,
+        public string|Lazy $total,
+        public string|Lazy $unit,
+        public Collection|Lazy $entries,
+        public Collection|Lazy $quick_amounts,
+        public Collection|Lazy $notes,
+        public int|Lazy $notes_count,
+        public int|Lazy $streak_days,
+        public int|Lazy $average_per_day,
+        public null|string|Lazy $goal,
+        public null|int|Lazy $progress,
+        public null|int|Lazy $remaining_amount,
+        public null|string|Lazy $created_at,
     ) {}
 
     public static function fromModel(CountHabit $countHabit): self
@@ -49,22 +50,22 @@ final class CountHabitData extends Data
 
         return new self(
             id: $countHabit->id,
-            total: Number::format($countHabit->getAttribute('entries_sum_amount'), locale: 'sv'),
-            unit: $countHabit->unit->name,
-            entries: CountHabitEntryData::collect(
+            total: Lazy::create(fn () => Number::format($countHabit->getAttribute('entries_sum_amount'), locale: 'sv')),
+            unit: Lazy::create(fn () => $countHabit->unit->name),
+            entries: Lazy::create(fn () => CountHabitEntryData::collect(
                 items: $countHabit->entries()->latest()->limit(5)->get(),
-            ),
-            quick_amounts: $quickAmounts,
-            notes: EntryNoteData::collect(
+            )),
+            quick_amounts: Lazy::create(fn () => $quickAmounts),
+            notes: Lazy::create(fn () => EntryNoteData::collect(
                 items: $countHabit->entries()->whereNotNull('note')->latest()->limit(5)->get(),
-            ),
-            notes_count: $countHabit->entries->filter(fn ($entry) => ! empty($entry->note))->count(),
-            streak_days: 0, // TODO: Calculate streak days
-            average_per_day: $averagePerDay,
-            goal: isset($countHabit->goal) ? Number::format($countHabit->goal, locale: 'sv') : null,
-            progress: $countHabit->progress,
-            remaining_amount: $countHabit->remaining_amount,
-            created_at: $countHabit->created_at?->toDayDateTimeString(),
+            )),
+            notes_count: Lazy::create(fn () => $countHabit->entries->filter(fn ($entry) => ! empty($entry->note))->count()),
+            streak_days: Lazy::create(fn () => 0), // TODO: Calculate streak days
+            average_per_day: Lazy::create(fn () => $averagePerDay),
+            goal: Lazy::create(fn () => isset($countHabit->goal) ? Number::format($countHabit->goal, locale: 'sv') : null),
+            progress: Lazy::create(fn () => $countHabit->progress),
+            remaining_amount: Lazy::create(fn () => $countHabit->remaining_amount),
+            created_at: Lazy::create(fn () => $countHabit->created_at?->toDayDateTimeString()),
         );
     }
 }

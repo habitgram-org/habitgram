@@ -1,3 +1,4 @@
+import DeleteHabitDialog from '@/components/habit/delete-habit-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -17,10 +18,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import useDebounce from '@/hooks/useDebounce';
 import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { Habit, PaginatedResponse } from '@/types';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { upperFirst } from 'lodash-es';
 import {
     CheckCircle2,
     ChevronLeft,
@@ -33,59 +36,34 @@ import {
     Target,
     Trash2Icon,
 } from 'lucide-react';
-import { useState } from 'react';
-
-// Types
-type HabitType = 'daily' | 'count' | 'abstinence';
-
-// interface Habit {
-//     id: string;
-//     title: string;
-//     type: HabitType;
-//     streak: number;
-//     goal?: string; // e.g. "3 times" or "30 mins"
-//     lastCompleted?: Date;
-//     status: 'completed' | 'pending' | 'failed' | 'active'; // active for abstinence
-//     color: string;
-// }
+import { useEffect, useState } from 'react';
 
 export default function Index({
     response,
 }: {
     response: PaginatedResponse<Habit>;
 }) {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [typeFilter, setTypeFilter] = useState<string>('all');
+    const [typeFilter, setTypeFilter] = useState('');
 
-    // Filter Logic
-    // const filteredHabits = MOCK_HABITS.filter((habit) => {
-    //     const matchesSearch = habit.title
-    //         .toLowerCase()
-    //         .includes(searchQuery.toLowerCase());
-    //     const matchesType = typeFilter === 'all' || habit.type === typeFilter;
-    //     return matchesSearch && matchesType;
-    // });
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-    // Pagination Logic
-    // const totalPages = Math.ceil(filteredHabits.length / itemsPerPage);
-    // const currentHabits = filteredHabits.slice(
-    //     startIndex,
-    //     startIndex + itemsPerPage,
-    // );
+    useEffect(() => {
+        router.get(
+            route('index'),
+            debouncedSearchQuery || typeFilter
+                ? { search: debouncedSearchQuery, type: typeFilter }
+                : {},
+            { preserveState: true },
+        );
+    }, [debouncedSearchQuery, typeFilter]);
 
-    const getTypeLabel = (type: HabitType) => {
-        switch (type) {
-            case 'daily':
-                return 'Daily';
-            case 'count':
-                return 'Count';
-            case 'abstinence':
-                return 'Abstinence';
-        }
-    };
+    function handleTypeFilterChange(val: string) {
+        setTypeFilter(val);
+    }
 
-    const getStatusBadge = (habit: HabitCollection) => {
+    const getStatusBadge = (habit: Habit) => {
         if (habit.type === 'abstinence') {
             return (
                 <Badge
@@ -159,19 +137,13 @@ export default function Index({
                             placeholder="Search habits..."
                             className="border-slate-200 bg-slate-50 pl-9"
                             value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setCurrentPage(1); // Reset to page 1 on search
-                            }}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                     <div className="flex w-full gap-2 md:w-auto">
                         <Select
                             value={typeFilter}
-                            onValueChange={(val) => {
-                                setTypeFilter(val);
-                                setCurrentPage(1);
-                            }}
+                            onValueChange={handleTypeFilterChange}
                         >
                             <SelectTrigger className="w-full border-slate-200 bg-slate-50 md:w-[180px]">
                                 <div className="flex items-center gap-2">
@@ -225,14 +197,20 @@ export default function Index({
                                     {/* Info */}
                                     <div className="min-w-0 flex-1">
                                         <div className="mb-1 flex items-center gap-2">
-                                            <h3 className="truncate font-semibold text-slate-900">
+                                            <Link
+                                                href={route(
+                                                    'habits.show',
+                                                    habit.id,
+                                                )}
+                                                className="truncate font-semibold text-slate-900"
+                                            >
                                                 {habit.name}
-                                            </h3>
+                                            </Link>
                                             <Badge
                                                 variant="secondary"
                                                 className="h-5 border-0 bg-slate-100 px-1.5 text-[10px] font-normal text-slate-500"
                                             >
-                                                {getTypeLabel(habit.type)}
+                                                {upperFirst(habit.type)}
                                             </Badge>
                                         </div>
 
@@ -240,16 +218,20 @@ export default function Index({
                                             <div className="flex items-center gap-1">
                                                 <Flame className="size-3.5 text-orange-500" />
                                                 <span className="font-medium text-slate-700">
-                                                    {habit.streak ?? 999}
+                                                    {habit.streak}
                                                 </span>
                                             </div>
-                                            {habit.goal && (
+                                            {habit.habitable?.goal && (
                                                 <>
                                                     <span className="text-slate-300">
                                                         •
                                                     </span>
                                                     <span className="text-xs">
-                                                        Goal: {habit.goal}
+                                                        Goal:{' '}
+                                                        {habit.habitable.goal +
+                                                            ' ' +
+                                                            habit.habitable
+                                                                .goal_unit}
                                                     </span>
                                                 </>
                                             )}
@@ -278,7 +260,16 @@ export default function Index({
                                                     Edit Habit
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem className="text-red-600">
+                                                <DropdownMenuItem
+                                                    variant="destructive"
+                                                    onSelect={(e) => {
+                                                        e.preventDefault();
+                                                        setIsDeleteDialogOpen(
+                                                            true,
+                                                        );
+                                                    }}
+                                                    className="text-red-600"
+                                                >
                                                     <Trash2Icon className="mr-2 size-4" />
                                                     Delete
                                                 </DropdownMenuItem>
@@ -286,6 +277,11 @@ export default function Index({
                                         </DropdownMenu>
                                     </div>
                                 </div>
+                                <DeleteHabitDialog
+                                    open={isDeleteDialogOpen}
+                                    onOpenChange={setIsDeleteDialogOpen}
+                                    action={route('habits.destroy', habit.id)}
+                                />
                             </Card>
                         ))
                     )}
@@ -311,49 +307,65 @@ export default function Index({
                         </p>
 
                         <div className="flex items-center gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() =>
-                                    setCurrentPage((p) => Math.max(1, p - 1))
-                                }
-                                disabled={currentPage === 1}
+                            <Link
+                                as="button"
+                                href={response.links[0].url ?? '#'}
+                                className={cn(
+                                    buttonVariants({
+                                        variant: 'outline',
+                                        size: 'sm',
+                                    }),
+                                )}
+                                disabled={response.meta.current_page === 1}
                             >
                                 <ChevronLeft className="mr-1 size-4" />
                                 Previous
-                            </Button>
+                            </Link>
+
                             <div className="flex items-center gap-1 px-2">
                                 {Array.from(
-                                    { length: response.meta.total },
+                                    { length: response.links.length - 2 },
                                     (_, i) => i + 1,
                                 ).map((page) => (
-                                    <button
+                                    <Link
+                                        href={response.links[page].url ?? '#'}
                                         key={page}
-                                        onClick={() => setCurrentPage(page)}
                                         className={cn(
+                                            buttonVariants({
+                                                variant: 'default',
+                                                size: 'default',
+                                            }),
                                             'size-8 rounded-md text-sm font-medium transition-colors',
-                                            currentPage === page
+                                            response.meta.current_page === page
                                                 ? 'bg-slate-900 text-white'
-                                                : 'text-slate-500 hover:bg-slate-100',
+                                                : 'bg-slate-50 text-slate-500 hover:bg-slate-100',
                                         )}
                                     >
                                         {page}
-                                    </button>
+                                    </Link>
                                 ))}
                             </div>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() =>
-                                    setCurrentPage((p) =>
-                                        Math.min(response.meta.total, p + 1),
-                                    )
+
+                            <Link
+                                as="button"
+                                href={
+                                    response.links[response.links.length - 1]
+                                        .url ?? '#'
                                 }
-                                disabled={currentPage === response.meta.total}
+                                className={cn(
+                                    buttonVariants({
+                                        variant: 'outline',
+                                        size: 'sm',
+                                    }),
+                                )}
+                                disabled={
+                                    response.meta.current_page ===
+                                    response.meta.last_page
+                                }
                             >
                                 Next
                                 <ChevronRight className="ml-1 size-4" />
-                            </Button>
+                            </Link>
                         </div>
                     </div>
                 )}

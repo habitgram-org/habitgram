@@ -15,7 +15,7 @@ interface Props {
     habitType: string;
     habitId: string;
     habitTypeIcon: React.ReactNode;
-    isPublic: boolean;
+    isPublic?: boolean;
     children?: ReactNode;
 }
 

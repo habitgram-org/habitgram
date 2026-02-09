@@ -85,6 +85,15 @@ export interface Habit {
     is_public?: boolean;
     notes?: Array<HabitNote>;
     notes_count?: number;
+    streak?: number;
+    status?: HabitStatus;
+}
+
+enum HabitStatus {
+    Completed = 'completed',
+    Pending = 'pending',
+    Failed = 'failed',
+    Active = 'active',
 }
 
 enum HabitType {
@@ -135,6 +144,7 @@ export interface CountHabit {
     streak_days: number;
     average_per_day: number;
     goal?: number;
+    goal_unit?: string;
     progress?: number;
     remaining_amount?: number;
 }
@@ -160,6 +170,8 @@ export interface DailyHabit {
     year: number;
     completed_days_in_year: number;
     created_at?: string;
+    goal?: number;
+    goal_unit?: string;
 }
 
 export interface DailyHabitEntry {

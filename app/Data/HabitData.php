@@ -7,6 +7,7 @@ namespace App\Data;
 use App\Data\AbstinenceHabit\AbstinenceHabitData;
 use App\Data\CountHabit\CountHabitData;
 use App\Data\DailyHabit\DailyHabitData;
+use App\Enums\HabitStatus;
 use App\Enums\HabitType;
 use App\Models\Habit;
 use Carbon\CarbonImmutable;
@@ -23,17 +24,19 @@ final class HabitData extends Data
         public string $id,
         public string $name,
         public HabitType $type,
-        public string|Lazy $image,
-        public null|string|Lazy $description,
-        public null|AbstinenceHabitData|CountHabitData|DailyHabitData|Lazy $habitable,
-        public null|CarbonImmutable|Lazy $starts_at,
-        public null|CarbonImmutable|Lazy $ends_at,
-        public null|string|Lazy $started_at,
-        public null|CarbonImmutable|Lazy $ended_at,
-        public bool|Lazy $has_started,
-        public bool|Lazy $is_public,
-        public Collection|Lazy $notes,
-        public int|Lazy $notes_count,
+        public HabitStatus $status,
+        public int $streak = 123,
+        public string|Lazy $image = '',
+        public null|string|Lazy $description = null,
+        public null|AbstinenceHabitData|CountHabitData|DailyHabitData|Lazy $habitable = null,
+        public null|CarbonImmutable|Lazy $starts_at = null,
+        public null|CarbonImmutable|Lazy $ends_at = null,
+        public null|string|Lazy $started_at = null,
+        public null|CarbonImmutable|Lazy $ended_at = null,
+        public bool|Lazy $has_started = false,
+        public bool|Lazy $is_public = false,
+        public Collection|Lazy|null $notes = null,
+        public int|Lazy $notes_count = 0,
     ) {}
 
     public static function fromModel(Habit $habit): self
@@ -47,6 +50,8 @@ final class HabitData extends Data
             id: $habit->id,
             name: $habit->name,
             type: $habit->getType(),
+            status: HabitStatus::Completed,
+            streak: 123, // TODO: Calculate status: if abstinence then always "Clean", other types Daily and Count depending on completion
             image: Lazy::create(fn () => radiance()
                 ->seed($habit->id)
                 ->text($text)
