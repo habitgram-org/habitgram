@@ -44,7 +44,7 @@ final class StoreUserRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'email' => mb_strtolower($this->input('email')),
+            'email' => mb_strtolower((string) $this->input('email')),
         ]);
     }
 }

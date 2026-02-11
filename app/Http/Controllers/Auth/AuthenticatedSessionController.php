@@ -7,9 +7,15 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Response;
 
 final class AuthenticatedSessionController
 {
+    public function create(): Response
+    {
+        return inertia('auth/login');
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -17,7 +23,7 @@ final class AuthenticatedSessionController
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
             return redirect()->intended('index');

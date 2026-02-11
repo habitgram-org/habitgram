@@ -47,6 +47,7 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
 # Copy configuration files
 COPY .docker/nginx/default.conf /etc/nginx/sites-available/default
 COPY .docker/php/conf.d/php.ini /usr/local/etc/php/conf.d/php.ini
+COPY .docker/php/conf.d/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 COPY .docker/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY entrypoint.sh /usr/local/bin/
 
@@ -60,6 +61,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 COPY --chown=www-data:www-data . .
+
+# Install dependencies based on environment
+RUN if [ "$APP_ENV" = "local" ] ; then \
+        echo "Installing and enabling xdebug for $APP_ENV environment..." && \
+        pecl install xdebug && \
+        docker-php-ext-enable xdebug ; \
+    fi
 
 RUN echo 'alias ar="php artisan"' >> ~/.bashrc
 

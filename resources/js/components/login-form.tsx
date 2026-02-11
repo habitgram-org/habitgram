@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Field,
     FieldDescription,
@@ -62,6 +63,15 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
                                             {errors['password']}
                                         </FieldDescription>
                                     )}
+                                </Field>
+                                <Field orientation="horizontal">
+                                    <Checkbox id="remember" name="remember" />
+                                    <FieldLabel
+                                        htmlFor="remember"
+                                        className="font-normal"
+                                    >
+                                        Remember me
+                                    </FieldLabel>
                                 </Field>
                                 <Field>
                                     <Button type="submit">Login</Button>
