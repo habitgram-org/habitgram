@@ -40,4 +40,11 @@ final class StoreUserRequest extends FormRequest
             'password' => $this->input('password'),
         ]);
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'email' => mb_strtolower($this->input('email')),
+        ]);
+    }
 }
