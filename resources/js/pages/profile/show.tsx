@@ -8,9 +8,7 @@ interface Props {
 export default function Show({ user }: Props) {
     return (
         <AppLayout>
-            <h1>
-                Welcome, <span className="font-bold">{user.username}</span>!
-            </h1>
+            <h1>{user.username + "'s" + ' profile page!'}</h1>
         </AppLayout>
     );
 }

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { Form } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
 import { ComponentProps } from 'react';
 
 export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
@@ -45,12 +45,12 @@ export function LoginForm({ className, ...props }: ComponentProps<'div'>) {
                                         <FieldLabel htmlFor="password">
                                             Password
                                         </FieldLabel>
-                                        <a
-                                            href="#"
+                                        <Link
+                                            href={route('password.request')}
                                             className="ml-auto text-sm underline-offset-4 hover:underline"
                                         >
                                             Forgot your password?
-                                        </a>
+                                        </Link>
                                     </div>
                                     <Input
                                         id="password"

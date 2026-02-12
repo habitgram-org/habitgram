@@ -6,7 +6,7 @@ declare module '@inertiajs/core' {
             auth: { user: { id: number; name: string } | null };
             appName: string;
         };
-        flashDataType: { newly_added_amount: number };
+        flashDataType: { newly_added_amount: number; status: string };
         errorValueType: string[];
     }
 }

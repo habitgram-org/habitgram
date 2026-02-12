@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
-import { Heart, Home, Menu, User } from 'lucide-react';
+import { Home, Menu } from 'lucide-react';
 import { ElementType } from 'react';
 import { Button, buttonVariants } from './ui/button';
 
@@ -16,8 +16,6 @@ interface NavItem {
 export default function SidebarMenu() {
     const { auth, currentRoute } = usePage<SharedData>().props;
     const homeRoute = route('index');
-    const activityRoute = route('activity');
-    const profileRoute = route('profile', { username: auth.user.username });
 
     const navItems: NavItem[] = [
         {
@@ -25,18 +23,6 @@ export default function SidebarMenu() {
             label: 'Home',
             url: homeRoute,
             isActive: homeRoute === currentRoute,
-        },
-        {
-            icon: Heart,
-            label: 'Activity',
-            url: activityRoute,
-            isActive: activityRoute === currentRoute,
-        },
-        {
-            icon: User,
-            label: 'Profile',
-            url: profileRoute,
-            isActive: profileRoute === currentRoute,
         },
     ];
 

@@ -17,7 +17,7 @@ final class CreateNewUser
     public function run(CreateNewUserDTO $dto): User
     {
         return DB::transaction(fn () => User::create([
-            'username' => mb_ltrim($dto->username, '@'),
+            'username' => $dto->username,
             'email' => $dto->email,
             'password' => bcrypt($dto->password),
         ]));
