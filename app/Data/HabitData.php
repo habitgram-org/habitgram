@@ -7,6 +7,8 @@ namespace App\Data;
 use App\Data\AbstinenceHabit\AbstinenceHabitData;
 use App\Data\CountHabit\CountHabitData;
 use App\Data\DailyHabit\DailyHabitData;
+use App\Enums\HabitColor;
+use App\Enums\HabitIcon;
 use App\Enums\HabitStatus;
 use App\Enums\HabitType;
 use App\Models\Habit;
@@ -18,16 +20,17 @@ use Spatie\LaravelData\Lazy;
 final class HabitData extends Data
 {
     /**
-     * @param  Collection<int, HabitNoteData>|Lazy  $notes
+     * @param Collection<int, HabitNoteData>|Lazy|null $notes
      */
     public function __construct(
         public string $id,
         public string $name,
+        public ?string $description,
+        public ?HabitColor $color,
+        public ?HabitIcon $icon,
         public HabitType $type,
         public HabitStatus $status,
         public int $streak = 123,
-        public string|Lazy $image = '',
-        public null|string|Lazy $description = null,
         public null|AbstinenceHabitData|CountHabitData|DailyHabitData|Lazy $habitable = null,
         public null|CarbonImmutable|Lazy $starts_at = null,
         public null|CarbonImmutable|Lazy $ends_at = null,
@@ -41,24 +44,20 @@ final class HabitData extends Data
 
     public static function fromModel(Habit $habit): self
     {
-        $parts = explode(' ', $habit->name);
+        $parts = explode(' ', $habit->title);
         $text = count($parts) > 1
             ? mb_strtoupper($parts[0][0].$parts[1][0])
-            : mb_strtoupper(mb_substr($habit->name, 0, 2));
+            : mb_strtoupper(mb_substr($habit->title, 0, 2));
 
         return new self(
             id: $habit->id,
-            name: $habit->name,
+            name: $habit->title,
+            description: $habit->description,
+            color: $habit->color,
+            icon: $habit->icon,
             type: $habit->getType(),
             status: HabitStatus::Completed,
             streak: 123, // TODO: Calculate status: if abstinence then always "Clean", other types Daily and Count depending on completion
-            image: Lazy::create(fn () => radiance()
-                ->seed($habit->id)
-                ->text($text)
-                ->textShadow(2)
-                ->square()
-                ->toBase64()),
-            description: Lazy::create(fn () => $habit->description),
             habitable: Lazy::create(fn () => $habit->getHabitableResource()),
             starts_at: Lazy::create(fn () => $habit->starts_at),
             ends_at: Lazy::create(fn () => $habit->ends_at),

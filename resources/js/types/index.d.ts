@@ -73,7 +73,8 @@ export interface Habit {
     id: string;
     name: string;
     type: HabitType;
-    image?: string;
+    color: string | null;
+    icon: string | null;
     habitable?: AbstinenceHabit | CountHabit | DailyHabit | null;
     description?: string | null;
     created_at?: string | null;
@@ -87,6 +88,11 @@ export interface Habit {
     notes_count?: number;
     streak?: number;
     status?: HabitStatus;
+}
+
+export interface HabitColor {
+    name: string;
+    value: string;
 }
 
 enum HabitStatus {

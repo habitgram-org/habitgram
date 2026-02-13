@@ -46,10 +46,18 @@ enum UnitType: int
     /**
      * @return UnitType[]
      */
-    public static function time(): array
+    public static function timeBased(): array
     {
         return [
             self::Seconds, self::Minutes, self::Hours,
         ];
+    }
+
+    /**
+     * @return array<int, array<string, int|string>>
+     */
+    public static function toArray(): array
+    {
+        return array_map(fn ($unit) => ['name' => $unit->name, 'value' => $unit->value], self::cases());
     }
 }

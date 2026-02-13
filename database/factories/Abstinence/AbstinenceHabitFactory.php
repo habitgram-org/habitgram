@@ -23,7 +23,7 @@ final class AbstinenceHabitFactory extends Factory
 
         return [
             'goal' => $hasGoal ? fake()->numberBetween(10_000, 100_000) : null,
-            'goal_unit' => $hasGoal ? fake()->randomElement(UnitType::time()) : null,
+            'goal_unit' => $hasGoal ? fake()->randomElement(UnitType::timeBased()) : null,
         ];
     }
 }

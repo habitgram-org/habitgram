@@ -16,7 +16,7 @@ interface Props {
     habit: Habit;
 }
 
-export default function Show({ habit }: Props) {
+export default function ShowHabit({ habit }: Props) {
     let content = <AbstinenceHabitDetails habit={habit} />;
     if (habit.type === HabitType.Count) {
         content = <CountHabitDetails habit={habit} />;

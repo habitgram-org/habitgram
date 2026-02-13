@@ -194,6 +194,7 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
             <div className="mx-auto max-w-2xl space-y-6">
                 <HabitHeader
                     title={habit.name}
+                    description={habit.description}
                     habitId={habit.id}
                     habitType="Abstinence Habit"
                     habitTypeIcon={<ShieldCheckIcon className="size-3" />}
@@ -248,6 +249,8 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </div>
                     </div>
                 </Card>
+
+                <InspirationalQuoteCard quote={quote} />
 
                 <Tabs defaultValue="overview" className="w-full">
                     <TabsList className="w-full">
@@ -370,8 +373,6 @@ export default function AbstinenceHabitDetails({ habit }: Props) {
                         </Card>
                     </TabsContent>
                 </Tabs>
-
-                <InspirationalQuoteCard quote={quote} />
 
                 <AddRelapseDialog
                     open={isRelapseDialogOpen}

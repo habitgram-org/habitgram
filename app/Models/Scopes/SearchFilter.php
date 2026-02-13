@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Scopes;
 
+use App\Models\Habit;
 use Illuminate\Database\Eloquent\Builder;
 
 final readonly class SearchFilter
@@ -12,6 +13,9 @@ final readonly class SearchFilter
         private ?string $search,
     ) {}
 
+    /**
+     * @param Builder<Habit> $query
+     */
     public function __invoke(Builder $query): void
     {
         $query->when($this->search, function (Builder $query): void {

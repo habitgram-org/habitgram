@@ -19,8 +19,7 @@ final class AbstinenceHabitRelapseData extends Data
 
     public static function fromModel(AbstinenceHabitRelapse $abstinenceHabitEntry): self
     {
-        // take previous, take current relapse, calculate the diff in days between them
-        // this will be streak days (?)
+        // TODO: take previous, take current relapse, calculate the diff in days between them
 
         return new self(
             id: $abstinenceHabitEntry->id,

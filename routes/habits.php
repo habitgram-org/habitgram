@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->as('habits.')->prefix('/habits')->group(function (): void {
     Route::get('create', [HabitController::class, 'create'])->name('create');
+    Route::post('', [HabitController::class, 'store'])->name('store');
     Route::get('{habit}', [HabitController::class, 'show'])->name('show');
     Route::delete('{habit}', [HabitController::class, 'destroy'])->name('destroy');
 

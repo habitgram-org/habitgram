@@ -65,6 +65,7 @@ export default function DailyHabitDetails({ habit }: Props) {
             <div className="mx-auto max-w-5xl space-y-6">
                 <HabitHeader
                     title={habit.name}
+                    description={habit.description}
                     habitId={habit.id}
                     habitType={habit.type}
                     habitTypeIcon={<Clock className="size-3" />}
@@ -187,6 +188,8 @@ export default function DailyHabitDetails({ habit }: Props) {
                     </div>
                 </Card>
 
+                <InspirationalQuoteCard quote={quote} />
+
                 {/* Tabs & Content */}
                 <Tabs defaultValue="overview" className="w-full">
                     <TabsList className="w-full">
@@ -264,8 +267,6 @@ export default function DailyHabitDetails({ habit }: Props) {
                             </Card>
                         </div>
 
-                        <InspirationalQuoteCard quote={quote} />
-
                         {/* Recent Thoughts */}
                         {habit.notes_count !== 0 && (
                             <Card className="p-6">
@@ -273,7 +274,7 @@ export default function DailyHabitDetails({ habit }: Props) {
                                     Recent Thoughts
                                 </h3>
                                 <div className="space-y-6">
-                                    {habit.notes.slice(0, 5).map((note) => (
+                                    {habit.notes?.slice(0, 5).map((note) => (
                                         <div key={note.id} className="group">
                                             <p className="mb-1 text-sm font-medium text-slate-800">
                                                 {note.note}

@@ -12,9 +12,10 @@ import { ReactNode, useState } from 'react';
 
 interface Props {
     title: string;
+    description?: string | null;
     habitType: string;
     habitId: string;
-    habitTypeIcon: React.ReactNode;
+    habitTypeIcon: ReactNode;
     isPublic?: boolean;
     children?: ReactNode;
 }
@@ -24,6 +25,7 @@ import { upperFirst } from 'lodash-es';
 
 export default function HabitHeader({
     title,
+    description,
     habitType,
     habitId,
     habitTypeIcon,
@@ -35,24 +37,32 @@ export default function HabitHeader({
     return (
         <>
             <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
-                        {title}
-                    </h1>
+                <div>
                     <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="gap-1">
-                            {habitTypeIcon}
-                            {upperFirst(habitType)}
-                        </Badge>
-                        <Badge variant="outline" className="gap-1">
-                            {isPublic ? (
-                                <Globe className="size-3" />
-                            ) : (
-                                <Lock className="size-3" />
-                            )}
-                            {isPublic ? 'Public' : 'Private'}
-                        </Badge>
+                        <h1 className="text-2xl font-bold text-slate-900 md:text-3xl">
+                            {title}
+                        </h1>
+
+                        <div className="space-x-2">
+                            <Badge variant="secondary" className="gap-1">
+                                {habitTypeIcon}
+                                {upperFirst(habitType)}
+                            </Badge>
+
+                            <Badge variant="outline" className="gap-1">
+                                {isPublic ? (
+                                    <Globe className="size-3" />
+                                ) : (
+                                    <Lock className="size-3" />
+                                )}
+                                {isPublic ? 'Public' : 'Private'}
+                            </Badge>
+                        </div>
                     </div>
+
+                    {description && (
+                        <p className="max-w-sm text-slate-500">{description}</p>
+                    )}
                 </div>
                 <div className="flex items-center gap-2">
                     {children}

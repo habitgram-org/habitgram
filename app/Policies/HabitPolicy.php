@@ -22,15 +22,15 @@ final class HabitPolicy
      */
     public function view(User $user, Habit $habit): bool
     {
-        return $habit->users->contains('id', $user->id);
+        return $this->isParticipant($user, $habit);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(): bool
     {
-        return false;
+        return true;
     }
 
     /**

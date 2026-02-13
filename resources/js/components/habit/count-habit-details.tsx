@@ -46,6 +46,7 @@ export default function CountHabitDetails({ habit }: Props) {
             <div className="mx-auto max-w-2xl space-y-6">
                 <HabitHeader
                     title={habit.name}
+                    description={habit.description}
                     habitId={habit.id}
                     habitType="Count Habit"
                     habitTypeIcon={<Target className="size-3" />}
@@ -94,7 +95,7 @@ export default function CountHabitDetails({ habit }: Props) {
                                     method="POST"
                                     action={route(
                                         'habits.count.entries.store',
-                                        { countHabit: habit.habitable.id },
+                                        { countHabit: habit.habitable?.id },
                                     )}
                                     options={{ preserveScroll: true }}
                                     onSuccess={() =>
@@ -120,6 +121,8 @@ export default function CountHabitDetails({ habit }: Props) {
                         </div>
                     </div>
                 )}
+
+                <InspirationalQuoteCard quote={quote} />
 
                 {/* Tabs for Overview and Notes */}
                 <Tabs defaultValue="overview" className="w-full">
@@ -166,8 +169,6 @@ export default function CountHabitDetails({ habit }: Props) {
                                 },
                             ]}
                         />
-
-                        <InspirationalQuoteCard quote={quote} />
 
                         {/* Recent Activity */}
                         <Card className="p-6">
@@ -224,7 +225,7 @@ export default function CountHabitDetails({ habit }: Props) {
                         className="space-y-4"
                         method="POST"
                         action={route('habits.count.entries.store', {
-                            countHabit: habit.habitable.id,
+                            countHabit: habit.habitable?.id,
                         })}
                         options={{ preserveScroll: true }}
                         onSuccess={() => {

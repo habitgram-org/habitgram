@@ -17,7 +17,7 @@ final class DailyHabitData extends Data
     private const int DAYS_IN_USUAL_YEAR = 365;
 
     /**
-     * @param  Collection<int, DailyHabitEntryData>  $entries
+     * @param  Collection<int, DailyHabitEntryData>|Lazy  $entries
      */
     public function __construct(
         public string $id,

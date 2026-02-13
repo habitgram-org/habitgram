@@ -33,6 +33,7 @@ final class InspiringService
             ['The ability to apply discipline, the ability to do what needs to be done no matter how he feels inside, in my opinion, is the definition of a true professional.', 'Mike Tyson'],
             ['Where I was born and where and how I have lived is unimportant. It is what I have done with where I have been that should be of interest.', 'Georgia O\'Keeffe'],
             ['If you stumbled yesterday I stumbled yesterday. There\'s no value in degrading myself for that. I can\'t change yesterday, but I can learn from it. The key is to recover quickly, to come back.', 'Brian P. Moran'],
+            ['Challenge yourselves and you will challenge the world.', 'Garry Kasparov'],
         ]);
     }
 }

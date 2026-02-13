@@ -1,4 +1,5 @@
 import DeleteHabitDialog from '@/components/habit/delete-habit-dialog';
+import HabitIcon from '@/components/habit/habit-icon';
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -38,7 +39,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-export default function Index({
+export default function HabitsListPage({
     response,
 }: {
     response: PaginatedResponse<Habit>;
@@ -188,10 +189,9 @@ export default function Index({
                                 className="group p-4 transition-shadow hover:shadow-md"
                             >
                                 <div className="flex items-center gap-4">
-                                    <img
-                                        src={habit.image}
-                                        className="flex size-12 shrink-0 items-center justify-center rounded-xl text-white shadow-sm"
-                                        alt=""
+                                    <HabitIcon
+                                        color={habit.color}
+                                        iconName={habit.icon}
                                     />
 
                                     {/* Info */}

@@ -3,7 +3,7 @@ import { EntryNote } from '@/types';
 import { FileText } from 'lucide-react';
 
 interface Props {
-    notes: EntryNote[];
+    notes?: EntryNote[];
     emptyMessage?: string;
 }
 
@@ -11,7 +11,7 @@ export default function HabitNotesTab({
     notes,
     emptyMessage = 'Add notes when tracking your progress to remember important details',
 }: Props) {
-    if (notes.length === 0) {
+    if (notes?.length === 0) {
         return (
             <Card className="p-12">
                 <div className="space-y-3 text-center">
@@ -29,7 +29,7 @@ export default function HabitNotesTab({
 
     return (
         <div className="space-y-4">
-            {notes.map((note, index) => (
+            {notes?.map((note, index) => (
                 <Card key={index} className="p-6">
                     <div className="space-y-3">
                         <div className="flex items-start justify-between">

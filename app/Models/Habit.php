@@ -7,6 +7,8 @@ namespace App\Models;
 use App\Data\AbstinenceHabit\AbstinenceHabitData;
 use App\Data\CountHabit\CountHabitData;
 use App\Data\DailyHabit\DailyHabitData;
+use App\Enums\HabitColor;
+use App\Enums\HabitIcon;
 use App\Enums\HabitType;
 use App\Models\Abstinence\AbstinenceHabit;
 use App\Models\Count\CountHabit;
@@ -23,7 +25,7 @@ use LogicException;
 
 /**
  * @property string $id
- * @property string $name
+ * @property string $title
  * @property string|null $description
  * @property \Carbon\CarbonImmutable|null $starts_at
  * @property \Carbon\CarbonImmutable|null $ends_at
@@ -35,6 +37,8 @@ use LogicException;
  * @property \Carbon\CarbonImmutable|null $updated_at
  * @property bool $is_public
  * @property \Carbon\CarbonImmutable|null $deleted_at
+ * @property HabitColor|null $color
+ * @property HabitIcon|null $icon
  * @property-read Model $habitable
  * @property-read User|null $leader
  * @property-read \Illuminate\Database\Eloquent\Collection<int, HabitNote> $notes
@@ -50,6 +54,7 @@ use LogicException;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereDescription($value)
@@ -57,11 +62,12 @@ use LogicException;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereHabitableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereHabitableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereIsPublic($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartsAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit withTrashed(bool $withTrashed = true)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit withoutTrashed()
@@ -160,6 +166,8 @@ final class Habit extends Model
             'ends_at' => 'immutable_datetime',
             'deleted_at' => 'immutable_datetime',
             'is_public' => 'boolean',
+            'color' => HabitColor::class,
+            'icon' => HabitIcon::class,
         ];
     }
 }

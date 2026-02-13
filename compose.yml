@@ -10,6 +10,8 @@ services:
       - redis
     env_file:
       - .env
+    environment:
+      - PHP_IDE_CONFIG=serverName=Habitgram
     volumes:
       - .:/var/www/html
     ports:
