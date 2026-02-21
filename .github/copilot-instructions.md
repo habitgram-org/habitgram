@@ -50,7 +50,7 @@ make up && make app-console
 composer lint              # Laravel Pint (PSR-12)
 composer refactor         # Rector + Pint
 composer test:types       # PHPStan static analysis
-vendor/bin/pest           # Pest tests
+docker exec -it habitgram_app sh -c "vendor/bin/pest" # Pest tests
 
 # TypeScript/React
 npm run lint              # ESLint
@@ -111,11 +111,29 @@ Wrap all multi-step database operations in `DB::transaction()` (see Actions)
 3. **Don't** use `Auth::user()` without null checks - prefer controller type-hinted `User $user`
 4. **Do** preserve `declare(strict_types=1)` in all PHP files
 5. **Don't** forget to run `npm run format` - it auto-organizes imports via Prettier
+6. **Don't** add `$fillable` property to models because all Models are already unguarded
+7. **Don't** use mass-assignment (`Model::create([...])`) instead always use properties and `save()` method
+8. **Do** create feature tests for all new features before considering them complete
+9. **Do** run `docker exec -it habitgram_app sh -c "php artisan model:show {Model}"` to inspect model structure and its columns in database
+10. **Do** run `docker exec -it habitgram_app sh -c "composer refactor"` after completing the features, fixes.
 
 ## Testing Strategy
+- **Always use the following command for running tests** `docker exec -it habitgram_app sh -c "php artisan test"`
 - **Pest PHP**: Feature tests for critical user flows (auth, habit CRUD)
 - **Unit tests**: Complex business logic in Actions
+- **Feature Test Coverage**: After implementing new features, always create comprehensive feature tests that cover:
+  - Valid input scenarios (happy path)
+  - Invalid input scenarios (validation errors)
+  - Edge cases (e.g., optional fields, boundary values)
+  - Database state assertions (records created, relationships established)
+  - Authorization checks if applicable
 - No E2E tests yet - prioritize backend feature coverage
+
+### Test File Organization
+- Feature tests: `tests/Feature/{Domain}/{FeatureTest}.php`
+- Follow naming convention: test descriptions should be readable sentences
+- Use Pest's `test()` function with descriptive strings
+- Example: `test('user cannot create a count habit without proper unit type', ...)`
 
 When reviewing code, focus on:
 

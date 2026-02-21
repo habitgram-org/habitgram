@@ -21,7 +21,7 @@ final class StoreHabitRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'title' => ['required', 'string', 'min:5', 'max:255'],
             'description' => ['nullable', 'string', 'min:5', 'max:255'],
             'color' => ['required', Rule::enum(HabitColor::class)],
@@ -29,10 +29,17 @@ final class StoreHabitRequest extends FormRequest
             'type' => ['required', Rule::enum(HabitType::class)],
             'is_public' => ['required', 'string'],
             'count.target' => ['nullable', 'integer'],
-            'count.unit_type' => ['nullable', Rule::enum(UnitType::class)],
-            'abstinence.unit_type' => ['nullable', Rule::enum(UnitType::class)],
+            'count.unit_type' => ['nullable', 'integer', Rule::enum(UnitType::class)],
+            'abstinence.goal_unit' => ['nullable', 'integer', Rule::enum(UnitType::class)],
             'abstinence.goal' => ['nullable', 'integer'],
         ];
+
+        // Make count.unit_type required if type is Count
+        if ($this->input('type') === HabitType::Count->value) {
+            $rules['count.unit_type'] = ['required', 'integer', Rule::enum(UnitType::class)];
+        }
+
+        return $rules;
     }
 
     public function getDTO(): CreateHabitDTO
@@ -44,14 +51,14 @@ final class StoreHabitRequest extends FormRequest
             'icon' => HabitIcon::from($this->input('icon')),
             'type' => HabitType::from($this->input('type')),
             'is_public' => $this->boolean('is_public'),
-            'count' => [
+            'count' => $this->input('count.unit_type') !== null ? [
                 'target' => $this->input('count.target'),
                 'unit_type' => $this->input('count.unit_type'),
-            ],
-            'abstinence' => [
-                'unit_type' => $this->input('abstinence.unit_type'),
+            ] : null,
+            'abstinence' => $this->input('abstinence.goal_unit') !== null ? [
+                'goal_unit' => $this->input('abstinence.goal_unit'),
                 'goal' => $this->input('abstinence.goal'),
-            ],
+            ] : null,
         ]);
     }
 }

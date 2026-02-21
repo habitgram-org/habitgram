@@ -20,18 +20,28 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 Route::get('/signup', [RegisteredUserController::class, 'create'])->name('signup.create');
 Route::post('/signup', [RegisteredUserController::class, 'store'])->name('signup.store');
 
-Route::get('/email/verify', fn () => inertia('auth/verify-email'))->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', function (Request $request) {
+    if ($request->user()->hasVerifiedEmail()) {
+        return to_route('index');
+    }
+
+    return inertia('auth/verify-email');
+})->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
 
-    return to_route('index');
+    return redirect(route('index', absolute: false).'?verified=1');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
+    if (! $request->user()->hasVerifiedEmail()) {
+        $request->user()->sendEmailVerificationNotification();
 
-    return back()->with('message', 'Verification link sent!');
+        return back()->with('message', 'Verification link sent!');
+    }
+
+    return back()->with('message', 'Email already verified.');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/forgot-password', function () {

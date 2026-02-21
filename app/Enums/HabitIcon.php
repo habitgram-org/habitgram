@@ -24,7 +24,7 @@ enum HabitIcon: string
     case Palette = 'Palette';
     case Brain = 'Brain';
     case Utensils = 'Utensils';
-    case Leaf = 'Leaf';
+    case BrainCircuit = 'BrainCircuit';
     case DollarSign = 'DollarSign';
     case Heart = 'Heart';
     case Smile = 'Smile';

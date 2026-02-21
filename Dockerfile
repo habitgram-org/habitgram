@@ -40,8 +40,8 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     pecl install redis && \
     pecl install channel://pecl.php.net/uv-0.3.0 && \
     docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-    docker-php-ext-install bcmath exif gd intl mbstring opcache pcntl pdo pdo_pgsql sodium xml zip && \
-    docker-php-ext-enable opcache pcntl redis uv && \
+    docker-php-ext-install bcmath exif gd intl mbstring opcache pcntl pdo pdo_pgsql sodium sockets xml zip && \
+    docker-php-ext-enable opcache pcntl redis uv sockets && \
     mkdir -p /var/www/html
 
 # Copy configuration files

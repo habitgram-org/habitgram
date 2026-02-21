@@ -27,10 +27,6 @@ use LogicException;
  * @property string $id
  * @property string $title
  * @property string|null $description
- * @property \Carbon\CarbonImmutable|null $starts_at
- * @property \Carbon\CarbonImmutable|null $ends_at
- * @property \Carbon\CarbonImmutable|null $started_at
- * @property \Carbon\CarbonImmutable|null $ended_at
  * @property string $habitable_type
  * @property string $habitable_id
  * @property \Carbon\CarbonImmutable|null $created_at
@@ -58,15 +54,11 @@ use LogicException;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereEndedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereEndsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereHabitableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereHabitableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereIsPublic($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereStartsAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Habit withTrashed(bool $withTrashed = true)

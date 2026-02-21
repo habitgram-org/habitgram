@@ -29,6 +29,6 @@ final class RegisteredUserController
 
         event(new Registered($user));
 
-        return redirect()->route('index');
+        return to_route('index');
     }
 }

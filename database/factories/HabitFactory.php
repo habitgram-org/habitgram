@@ -19,12 +19,8 @@ final class HabitFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->words(2, asText: true),
+            'title' => fake()->words(2, asText: true),
             'description' => fake()->optional()->text(),
-            'starts_at' => null,
-            'ends_at' => null,
-            'started_at' => fake()->dateTimeBetween(now()->subYear()),
-            'ended_at' => null,
             'is_public' => fake()->boolean(),
         ];
     }

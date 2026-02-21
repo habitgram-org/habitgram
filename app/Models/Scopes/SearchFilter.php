@@ -14,7 +14,7 @@ final readonly class SearchFilter
     ) {}
 
     /**
-     * @param Builder<Habit> $query
+     * @param  Builder<Habit>  $query
      */
     public function __invoke(Builder $query): void
     {

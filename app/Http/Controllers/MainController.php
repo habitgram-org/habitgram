@@ -9,6 +9,7 @@ use App\Enums\HabitType;
 use App\Models\Scopes\SearchFilter;
 use App\Models\Scopes\TypeFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Response;
 use Spatie\LaravelData\PaginatedDataCollection;
 

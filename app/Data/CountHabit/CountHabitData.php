@@ -50,7 +50,7 @@ final class CountHabitData extends Data
 
         return new self(
             id: $countHabit->id,
-            total: Lazy::create(fn () => Number::format($countHabit->getAttribute('entries_sum_amount'), locale: 'sv')),
+            total: Lazy::create(fn () => Number::format($countHabit->getAttribute('entries_sum_amount') ?? 0, locale: 'sv')),
             unit: Lazy::create(fn () => $countHabit->unit->name),
             entries: Lazy::create(fn () => CountHabitEntryData::collect(
                 items: $countHabit->entries()->latest()->limit(5)->get(),

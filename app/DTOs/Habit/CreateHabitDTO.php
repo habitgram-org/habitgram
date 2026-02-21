@@ -18,5 +18,7 @@ final class CreateHabitDTO extends Dto
         public HabitIcon $icon,
         public HabitType $type,
         public bool $is_public,
+        public ?CreateCountHabitDTO $count = null,
+        public ?CreateAbstinenceHabitDTO $abstinence = null,
     ) {}
 }

@@ -6,7 +6,6 @@ namespace App\Providers;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -37,8 +36,6 @@ final class AppServiceProvider extends ServiceProvider
         $this->configureUrls();
         $this->configureVite();
         $this->configurePasswordValidation();
-
-        JsonResource::withoutWrapping();
     }
 
     /**
@@ -88,7 +85,7 @@ final class AppServiceProvider extends ServiceProvider
 
     private function configurePasswordValidation(): void
     {
-        Password::defaults(fn () => $this->app->environment('staging', 'production')
+        Password::defaults(fn () => $this->app->environment('testing', 'staging', 'production')
             ? Password::min(12)->uncompromised()
             : null);
     }

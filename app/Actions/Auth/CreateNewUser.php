@@ -16,10 +16,14 @@ final class CreateNewUser
      */
     public function run(CreateNewUserDTO $dto): User
     {
-        return DB::transaction(fn () => User::create([
-            'username' => $dto->username,
-            'email' => $dto->email,
-            'password' => bcrypt($dto->password),
-        ]));
+        return DB::transaction(function () use ($dto) {
+            $user = new User();
+            $user->username = $dto->username;
+            $user->email = $dto->email;
+            $user->password = bcrypt($dto->password);
+            $user->save();
+
+            return $user;
+        });
     }
 }

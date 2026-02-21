@@ -23,7 +23,7 @@ import {
     Clock,
     Target,
 } from 'lucide-react';
-import { BaseSyntheticEvent, FormEvent } from 'react';
+import { BaseSyntheticEvent, FormEvent, useEffect } from 'react';
 
 import ErrorField from '@/components/error-field';
 import {
@@ -54,22 +54,41 @@ export default function CreateHabitPage({
     countUnitTypes,
     abstinenceUnitTypes,
 }: Props) {
-    const { data, setData, post, errors } = useForm({
+    const { data, setData, post, errors } = useForm<{
+        title: string;
+        description: string;
+        color: string;
+        icon: string;
+        type: HabitType;
+        is_public: string;
+        count: {
+            target: number | null;
+            unit_type: number | null;
+        };
+        abstinence: {
+            goal: number | null;
+            goal_unit: number | null;
+        };
+    }>({
         title: '',
         description: '',
-        color: '',
+        color: 'bg-black',
         icon: '',
         type: HabitType.Daily,
-        is_public: '',
+        is_public: 'off',
         count: {
-            target: '',
-            unit_type: 0,
+            target: null,
+            unit_type: null,
         },
         abstinence: {
-            unit_type: 0,
-            goal: '',
+            goal_unit: null,
+            goal: null,
         },
     });
+
+    useEffect(() => {
+        console.log(errors);
+    }, [errors]);
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
@@ -152,7 +171,7 @@ export default function CreateHabitPage({
                                             )
                                         }
                                         placeholder="Why is this habit important to you?"
-                                        className="min-h-[100px] resize-none"
+                                        className="min-h-25 resize-none"
                                     />
                                     {errors.description && (
                                         <ErrorField>
@@ -421,6 +440,16 @@ export default function CreateHabitPage({
                                                         placeholder="e.g. 30"
                                                         className="bg-white"
                                                     />
+                                                    {errors.abstinence
+                                                        ?.goal && (
+                                                        <ErrorField>
+                                                            {
+                                                                errors
+                                                                    .abstinence
+                                                                    .goal
+                                                            }
+                                                        </ErrorField>
+                                                    )}
                                                 </div>
                                                 <div className="grid gap-2">
                                                     <Label htmlFor="goal-unit">
@@ -432,7 +461,7 @@ export default function CreateHabitPage({
                                                             value,
                                                         ) =>
                                                             setData(
-                                                                'abstinence.unit_type',
+                                                                'abstinence.goal_unit',
                                                                 parseInt(value),
                                                             )
                                                         }
@@ -457,6 +486,16 @@ export default function CreateHabitPage({
                                                             )}
                                                         </SelectContent>
                                                     </Select>
+                                                    {errors.abstinence
+                                                        ?.goal_unit && (
+                                                        <ErrorField>
+                                                            {
+                                                                errors
+                                                                    .abstinence
+                                                                    .goal_unit
+                                                            }
+                                                        </ErrorField>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

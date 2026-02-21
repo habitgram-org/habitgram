@@ -102,7 +102,7 @@ final class AbstinenceHabit extends Model
 
         return Attribute::make(
             get: fn () => (int) ($relapse?->happened_at->diffInMilliseconds()
-                ?? $this->habit->started_at->diffInMilliseconds()),
+                ?? $this->habit->created_at->diffInMilliseconds()),
         );
     }
 

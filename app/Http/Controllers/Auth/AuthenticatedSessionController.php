@@ -26,7 +26,7 @@ final class AuthenticatedSessionController
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('index');
+            return redirect()->intended();
         }
 
         return back()->withErrors([
